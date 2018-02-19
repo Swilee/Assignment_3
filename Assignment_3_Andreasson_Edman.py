@@ -1,7 +1,4 @@
-import numpy as np
-
-x = np.array([])
-
-print('hoppas detta funkar')
-
-print('det funkar skit')
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+import sys
