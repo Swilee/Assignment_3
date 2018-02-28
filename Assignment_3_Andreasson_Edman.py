@@ -9,7 +9,7 @@ class PokerWindow(QGroupBox):
     ''' PokerWindow represents the five cards put on the table and the player options '''
     def __init__(self):
         super().__init__("Poker content")
-
+        pot=QGroupBox('pot=%d' %123451)
         checkbutton = QPushButton("Check/Call")
         foldbutton = QPushButton("Fold")
         betbutton = QPushButton("Bet")
@@ -20,6 +20,7 @@ class PokerWindow(QGroupBox):
         card5 = QPushButton("kort5")
 
         vbox = QVBoxLayout()
+        vbox.addWidget(pot)
         vbox.addWidget(checkbutton)
         vbox.addWidget(foldbutton)
         vbox.addWidget(betbutton)
