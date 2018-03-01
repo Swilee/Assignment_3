@@ -5,17 +5,20 @@ from PyQt5.QtSvg import *
 import sys
 qt_app = QApplication(sys.argv)
 
-class Table(QGraphicsScene):
+class Tablescene(QGraphicsScene):
     def __init__(self):
-        super().__init__("Poker content")
+        super().__init__()
         self.tile = QPixmap('table.png')
         self.setBackgroundBrush(QBrush(self.tile))
 
 
-class PokerWindow(QGroupBox):
+class PokerWindow(QGraphicsView):
     ''' PokerWindow represents the five cards put on the table and the player options '''
     def __init__(self):
-        super().__init__("Poker content")
+        #super().__init__("Poker content")
+
+        self.scene = Tablescene()
+        super().__init__(self.scene)
 
         pot = QLabel('pot=%d' % 123451)
         checkbutton = QPushButton("Check/Call")
@@ -44,37 +47,44 @@ class PokerWindow(QGroupBox):
         hbox.addStretch(1)
         hbox.addLayout(vbox)
 
-        player1box = QHBoxLayout()
+        player1box = QGroupBox('Player')
+        player1box.setLayout(QHBoxLayout())
         player1card1 = QPushButton("första")
         player1card2 = QPushButton("andra")
 
         player2card1 = QPushButton("första")
         player2card2 = QPushButton("andra")
 
-        Playername1 = QLabel('Player: %s' % 'Alex')
-        Playername2 = QLabel('Player: %s' % 'Edman')
+        Playername1 = QLabel('%s : %d $' % ('Alex', 500))
+        Playername2 = QLabel('%s : %d $' % ('Edman', 200))
 
-        player1box.addWidget(player2card1)
-        player1box.addWidget(player2card2)
-        player1box.addWidget(Playername1)
+        player1box.layout().addWidget(player2card1)
+        player1box.layout().addWidget(player2card2)
+        player1box.layout().addWidget(Playername1)
 
-        player2box = QHBoxLayout()
-        player2box.addWidget(player1card1)
-        player2box.addWidget(player1card2)
-        player2box.addWidget(Playername2)
+
+        player2box = QGroupBox('Player')
+        player2box.setLayout( QHBoxLayout())
+        player2box.layout().addWidget(player1card1)
+        player2box.layout().addWidget(player1card2)
+        player2box.layout().addWidget(Playername2)
+
 
 
         final=QVBoxLayout()
         final.addLayout(hbox)
-        final.addLayout(player1box)
-        final.addLayout(player2box)
+        final.addWidget(player1box)
+        final.addWidget(player2box)
 
 
         self.setLayout(final)
         self.setGeometry(600, 300, 300, 150)
         self.setWindowTitle('Texas Holdem')
 
-
+app = QApplication(sys.argv)
 game = PokerWindow()
 game.show()
-qt_app.exec_()
+#qt_app.exec_()
+
+app.exec_()
+
