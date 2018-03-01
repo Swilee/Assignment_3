@@ -20,7 +20,7 @@ class PokerWindow(QGraphicsView):
         self.scene = Tablescene()
         super().__init__(self.scene)
 
-        pot = QLabel('pot=%d' % 123451)
+        pot = QLabel('Pot=%d $' % 123451)
         checkbutton = QPushButton("Check/Call")
         foldbutton = QPushButton("Fold")
         betbutton = QPushButton("Bet")
