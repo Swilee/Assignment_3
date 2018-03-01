@@ -1,15 +1,23 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from PyQt5.QtSvg import *
 import sys
 qt_app = QApplication(sys.argv)
+
+class Table(QGraphicsScene):
+    def __init__(self):
+        super().__init__("Poker content")
+        self.tile = QPixmap('table.png')
+        self.setBackgroundBrush(QBrush(self.tile))
 
 
 class PokerWindow(QGroupBox):
     ''' PokerWindow represents the five cards put on the table and the player options '''
     def __init__(self):
         super().__init__("Poker content")
-        pot = QGroupBox('pot=%d' % 123451)
+
+        pot = QLabel('pot=%d' % 123451)
         checkbutton = QPushButton("Check/Call")
         foldbutton = QPushButton("Fold")
         betbutton = QPushButton("Bet")
@@ -43,8 +51,8 @@ class PokerWindow(QGroupBox):
         player2card1 = QPushButton("första")
         player2card2 = QPushButton("andra")
 
-        Playername1 = QGroupBox('Player: %s' % 'Alex')
-        Playername2 = QGroupBox('Player: %s' % 'Edman')
+        Playername1 = QLabel('Player: %s' % 'Alex')
+        Playername2 = QLabel('Player: %s' % 'Edman')
 
         player1box.addWidget(player2card1)
         player1box.addWidget(player2card2)
@@ -60,6 +68,7 @@ class PokerWindow(QGroupBox):
         final.addLayout(hbox)
         final.addLayout(player1box)
         final.addLayout(player2box)
+
 
         self.setLayout(final)
         self.setGeometry(600, 300, 300, 150)
