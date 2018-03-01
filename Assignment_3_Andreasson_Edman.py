@@ -2,6 +2,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
+
+CurrentBet = 0
 import sys
 qt_app = QApplication(sys.argv)
 
@@ -20,8 +22,13 @@ class PokerWindow(QGraphicsView):
         self.scene = Tablescene()
         super().__init__(self.scene)
 
-        pot = QLabel('Pot=%d $' % 123451)
-        checkbutton = QPushButton("Check/Call")
+        Potlabel = QLabel('Pot = %d $' % 123451)
+        CurrentBetLabel = QLabel('Current bet = %d $' %1)
+        if CurrentBet==0:
+            checkbutton = QPushButton("Check")
+        else:
+            checkbutton = QPushButton("Call")
+
         foldbutton = QPushButton("Fold")
         betbutton = QPushButton("Bet")
         card1 = QPushButton("kort1")
@@ -31,7 +38,8 @@ class PokerWindow(QGraphicsView):
         card5 = QPushButton("kort5")
 
         vbox = QVBoxLayout()
-        vbox.addWidget(pot)
+        vbox.addWidget(Potlabel)
+        vbox.addWidget(CurrentBetLabel)
         vbox.addWidget(checkbutton)
         vbox.addWidget(foldbutton)
         vbox.addWidget(betbutton)
@@ -57,6 +65,8 @@ class PokerWindow(QGraphicsView):
 
         Playername1 = QLabel('%s : %d $' % ('Alex', 500))
         Playername2 = QLabel('%s : %d $' % ('Edman', 200))
+
+
 
         player1box.layout().addWidget(player2card1)
         player1box.layout().addWidget(player2card2)
