@@ -1,4 +1,3 @@
-
 from Assignment_3 import poker, Assignment_3_Andreasson_Edman
 import numpy as np
 #setup
@@ -34,7 +33,7 @@ class Player(object):
         self.new_stack.emit()
 
     def fold(self):
-        self.cards = []
+        self.hand.cards = []
 
 
 for i in range(0, NumberOfPlayers):
@@ -55,9 +54,8 @@ for i in range(0, 2*NumberOfPlayers):
         Players[i].hand.givecard(card)
 
 
-player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
-player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
-
+#player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
+#player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 
 Assignment_3_Andreasson_Edman.game.show()
 Assignment_3_Andreasson_Edman.app.exec_()

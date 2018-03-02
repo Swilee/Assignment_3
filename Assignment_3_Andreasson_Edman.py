@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
 from Assignment_3 import card_view
+from Assignment_3 import pokergame
 
 CurrentBet = 0
 import sys
@@ -29,7 +30,6 @@ class PokerWindow(QGraphicsView):
             checkbutton = QPushButton("Check")
         else:
             checkbutton = QPushButton("Call")
-
         foldbutton = QPushButton("Fold")
         betbutton = QPushButton("Bet")
         card1 = QPushButton("kort1")
