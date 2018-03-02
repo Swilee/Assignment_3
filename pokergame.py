@@ -18,7 +18,8 @@ class Player(object):
         self.stack = startingstack
         self.name = playername
         self.cards = []
-        self.hand = []
+        self.hand = poker.PlayerHand()
+
 
     def bet(self, amount):
 
@@ -49,16 +50,16 @@ for i in range(0, 2*NumberOfPlayers):
     card = Deck.TakeTopCard()
     print(card.symbol)
     if i > NumberOfPlayers-1:
-        Players[i-NumberOfPlayers].cards = np.append(Players[i-NumberOfPlayers].cards, card)
+        Players[i-NumberOfPlayers].hand.givecard(card)
     else:
-        Players[i].cards = np.array([card])
+        Players[i].hand.givecard(card)
+
 
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 
-Assignment_3_Andreasson_Edman.game.show()
-#qt_app.exec_()
 
+Assignment_3_Andreasson_Edman.game.show()
 Assignment_3_Andreasson_Edman.app.exec_()
 
 

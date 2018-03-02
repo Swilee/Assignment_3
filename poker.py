@@ -117,7 +117,7 @@ class Deck(object):
         return topcard
 
 
-class PlayerHand():
+class PlayerHand:
     """
     The playerhand class can be used to create a player hand. The hand may be given cards, have cards removed,
     sorted and evaluated for the best poker hand.
@@ -143,6 +143,10 @@ class PlayerHand():
 
     def sortcards(self):
         return np.sort(self.cards)
+
+
+class Pokerhand():
+    pass
 
     def best_poker_hand(self, cards=[]):
         cards = np.append(self.cards, cards)
