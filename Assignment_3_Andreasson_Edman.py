@@ -101,7 +101,7 @@ class Playerwindow(QGraphicsView):
         self.box.setLayout(QHBoxLayout())
         self.box.layout().addWidget(self.cards)
         self.box.layout().addWidget(QLabel('%s %d $' % self.name, self.stack))
-        print('bananer')
+
 
 app = QApplication(sys.argv)
 game = PokerWindow()
