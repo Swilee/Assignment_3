@@ -1,5 +1,5 @@
 
-from Assignment_3 import poker, Assignment_3_Andreasson_Edman
+import poker, Assignment_3_Andreasson_Edman
 import numpy as np
 #setup
 
@@ -21,10 +21,12 @@ class Player(object):
         self.hand = []
 
     def bet(self, amount):
+
         if amount > self.stack:
             print('error, you cant bet more than you have')
         else:
-            self.stack=self.stack - amount
+            self.stack = self.stack - amount
+            self.new_stack.emit()
 
     def win(self, pot):
         self.stack = self.stack + pot
