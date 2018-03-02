@@ -34,16 +34,18 @@ for i in range(0, NumberOfPlayers):
     player = Player(STARTINGSTACK, Playername[i])
     Players.append(player)
 
-Players[1].win(200)
-Players[1].bet(123)
-print(Players[1].name, Players[1].stack, Players[1].cards)
-
 #starta
 CurrentBet = STARTINGBET
 Deck = poker.Deck()
 Deck.ShuffleDeck()
 
-for i in range (0,2*NumberOfPlayers):
-    Deck.TakeTopCard()
+for i in range(0, 2*NumberOfPlayers-1):
+    card = Deck.TakeTopCard()
+    if i > NumberOfPlayers-1:
+        Players[i-NumberOfPlayers].cards = Players[i-NumberOfPlayers].cards.append(card)
+    else:
+        Players[i].cards = Players[i].cards.append(card)
+    print(Players[0])
+
 
 
