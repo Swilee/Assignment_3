@@ -1,5 +1,5 @@
 
-from Assignment_3 import poker, Assignment_3_Andreasson_Edman
+import poker, Assignment_3_Andreasson_Edman
 import numpy as np
 #setup
 
@@ -21,7 +21,6 @@ class Player(object):
         self.hand = []
 
     def bet(self, amount):
-
         self.stack=self.stack - amount
 
     def win(self, pot):

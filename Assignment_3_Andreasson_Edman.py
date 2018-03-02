@@ -92,16 +92,19 @@ class PokerWindow(QGraphicsView):
         self.setGeometry(600, 300, 300, 150)
         self.setWindowTitle('Texas Holdem')
 
-class Playerwindow(QGraphicsView):
-    def __init__(self, startingstack, playername, cards):
-        self.name = playername
-        self.cards = cards
-        self.stack = startingstack
-        self.box = QGroupBox('Player')
-        self.box.setLayout(QHBoxLayout())
-        self.box.layout().addWidget(self.cards)
-        self.box.layout().addWidget(QLabel('%s %d $' % self.name, self.stack))
-        print('bananer')
+class Playerwindow(QGroupBox):
+    def __init__(self, player):
+        super().__init__(player.name)
+        self.player = player
+        self.setLayout(QHBoxLayout())
+        self.layout().addWidget(CardView(player.hand))
+        self.stack = QLabel()
+        self.layout().addWidget(self.stack)
+        self.player.new_stack.connect(self.update_stack)
+        self.update_stack()
+
+    def update_stack(self):
+        self.stack.setText('%d $' % self.player.stack)
 
 app = QApplication(sys.argv)
 game = PokerWindow()
