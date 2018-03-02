@@ -8,10 +8,9 @@ class Suit(Enum):
     Here an enum class is created to represent the suits.
     """
     Hearts = 0
-    Spades = 1
-    Diamonds = 2
+    Spades = 2
+    Diamonds = 1
     Clubs = 3
-
 
 class CardCombo(IntEnum):
     """
@@ -27,7 +26,7 @@ class CardCombo(IntEnum):
     fourofakind = 7
     straightflush = 8
 
-Uni = [u'\u2665', u'\u2660', u'\u2666', u'\u2663']
+Uni = [u'\u2665', u'\u2666',  u'\u2660', u'\u2663']
 #Hearts = u'\u2665'
 #suit.Clubs = u'\u2663'
 #suit.Spades = u'\u2660'

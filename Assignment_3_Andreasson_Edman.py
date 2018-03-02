@@ -2,6 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
+from Assignment_3 import card_view
 
 CurrentBet = 0
 import sys
@@ -72,7 +73,7 @@ class Playerwindow(QGroupBox):
         super().__init__(player.name)
         self.player = player
         self.setLayout(QHBoxLayout())
-        self.layout().addWidget(CardView(player.hand))
+        self.layout().addWidget(card_view.CardView(player.hand))
         self.stack = QLabel()
         self.layout().addWidget(self.stack)
         self.player.new_stack.connect(self.update_stack)

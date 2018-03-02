@@ -4,13 +4,13 @@ import numpy as np
 #setup
 
 pot = 0
-NumberOfPlayers = int(input('Number of players:'))
+NumberOfPlayers = 2#int(input('Number of players:'))
 Playername=[None]*NumberOfPlayers
 for i in range(0, NumberOfPlayers):
-    Playername[i] = input('Player %d name:' % (i+1))
+    Playername[i] = '%s' % str(i+1)  #input('Player %d name:' % (i+1))
 
-STARTINGSTACK = float(input('Set starting stack amount:'))
-STARTINGBET = float(input('Set starting bet:'))
+STARTINGSTACK =2000 # float(input('Set starting stack amount:'))
+STARTINGBET = 50   #float(input('Set starting bet:'))
 ActivePlayers = NumberOfPlayers
 Players = []
 class Player(object):
