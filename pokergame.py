@@ -1,5 +1,5 @@
 
-import poker, Assignment_3_Andreasson_Edman
+from Assignment_3 import poker, Assignment_3_Andreasson_Edman
 import numpy as np
 #setup
 
@@ -53,9 +53,8 @@ for i in range(0, 2*NumberOfPlayers):
     else:
         Players[i].cards = np.array([card])
 
-print(Players[0].cards[0], Players[0].cards[1])
-print(Players[1].cards[0], Players[1].cards[1])
-
+player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
+player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 
 Assignment_3_Andreasson_Edman.game.show()
 #qt_app.exec_()

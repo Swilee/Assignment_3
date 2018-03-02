@@ -56,41 +56,16 @@ class PokerWindow(QGraphicsView):
         hbox.addLayout(vbox)
 
 
-        player1box = QGroupBox('Player')
-        player1box.setLayout(QHBoxLayout())
-        player1card1 = QPushButton("första")
-        player1card2 = QPushButton("andra")
-
-        player2card1 = QPushButton("första")
-        player2card2 = QPushButton("andra")
-
-        Playername1 = QLabel('%s : %d $' % (input('Name?'), 500))
-        Playername2 = QLabel('%s : %d $' % ('Edman', 200))
-
-
-
-        player1box.layout().addWidget(player2card1)
-        player1box.layout().addWidget(player2card2)
-        player1box.layout().addWidget(Playername1)
-
-
-        player2box = QGroupBox('Player')
-        player2box.setLayout( QHBoxLayout())
-        player2box.layout().addWidget(player1card1)
-        player2box.layout().addWidget(player1card2)
-        player2box.layout().addWidget(Playername2)
-
-
 
         final=QVBoxLayout()
         final.addLayout(hbox)
-        final.addWidget(player1box)
-        final.addWidget(player2box)
+
 
 
         self.setLayout(final)
         self.setGeometry(600, 300, 300, 150)
         self.setWindowTitle('Texas Holdem')
+
 
 class Playerwindow(QGroupBox):
     def __init__(self, player):
