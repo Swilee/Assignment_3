@@ -55,6 +55,7 @@ class PokerWindow(QGraphicsView):
         hbox.addStretch(1)
         hbox.addLayout(vbox)
 
+
         player1box = QGroupBox('Player')
         player1box.setLayout(QHBoxLayout())
         player1card1 = QPushButton("första")
@@ -63,7 +64,7 @@ class PokerWindow(QGraphicsView):
         player2card1 = QPushButton("första")
         player2card2 = QPushButton("andra")
 
-        Playername1 = QLabel('%s : %d $' % ('Alex', 500))
+        Playername1 = QLabel('%s : %d $' % (input('Name?'), 500))
         Playername2 = QLabel('%s : %d $' % ('Edman', 200))
 
 
@@ -91,10 +92,16 @@ class PokerWindow(QGraphicsView):
         self.setGeometry(600, 300, 300, 150)
         self.setWindowTitle('Texas Holdem')
 
+class Playerwindow(QGraphicsView):
+    def __init__(self, startingstack, playername, cards):
+        self.name = playername
+        self.cards = cards
+        self.stack = startingstack
+        self.box = QGroupBox('Player')
+        self.box.setLayout(QHBoxLayout())
+        self.box.layout().addWidget(self.cards)
+        self.box.layout().addWidget(QLabel('%s %d $' % self.name, self.stack))
+
 app = QApplication(sys.argv)
 game = PokerWindow()
-game.show()
-#qt_app.exec_()
-
-app.exec_()
 

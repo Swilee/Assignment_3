@@ -1,6 +1,6 @@
 
-from Assignment_3 import poker
-
+from Assignment_3 import poker, Assignment_3_Andreasson_Edman
+import numpy as np
 #setup
 
 pot = 0
@@ -21,6 +21,7 @@ class Player(object):
         self.hand = []
 
     def bet(self, amount):
+
         self.stack=self.stack - amount
 
     def win(self, pot):
@@ -39,13 +40,21 @@ CurrentBet = STARTINGBET
 Deck = poker.Deck()
 Deck.ShuffleDeck()
 
-for i in range(0, 2*NumberOfPlayers-1):
+for i in range(0, 2*NumberOfPlayers):
     card = Deck.TakeTopCard()
+    print(card.symbol)
     if i > NumberOfPlayers-1:
-        Players[i-NumberOfPlayers].cards = Players[i-NumberOfPlayers].cards.append(card)
+        Players[i-NumberOfPlayers].cards = np.append(Players[i-NumberOfPlayers].cards, card)
     else:
-        Players[i].cards = Players[i].cards.append(card)
-    print(Players[0])
+        Players[i].cards = np.array([card])
 
+print(Players[0].cards[0], Players[0].cards[1])
+print(Players[1].cards[0], Players[1].cards[1])
+
+
+Assignment_3_Andreasson_Edman.game.show()
+#qt_app.exec_()
+
+Assignment_3_Andreasson_Edman.app.exec_()
 
 
