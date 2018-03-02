@@ -32,18 +32,14 @@ class Player(object):
 
     def fold(self):
         self.hand.cards = []
-<<<<<<< HEAD
-=======
+
         self.player_fold.emit()
         self.active = 0
-
 
 
     def remove_player():
         player
         player_fold.connect()
-
->>>>>>> 43db2271e2c6cf853b58821ed26bad42012d1c40
 
 
 for i in range(0, NumberOfPlayers):
@@ -64,16 +60,12 @@ for i in range(0, 2*NumberOfPlayers):
         Players[i].hand.givecard(card)
 
 
-<<<<<<< HEAD
-#player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
-#player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
-=======
+
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 
 app =Assignment_3_Andreasson_Edman.QApplication(sys.argv)
 
->>>>>>> 43db2271e2c6cf853b58821ed26bad42012d1c40
 
 Assignment_3_Andreasson_Edman.game.show()
 Assignment_3_Andreasson_Edman.app.exec_()
