@@ -2,8 +2,13 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
+<<<<<<< HEAD
 from Assignment_3 import card_view
 from Assignment_3 import pokergame
+=======
+from Assignment_3 import card_view, poker
+
+>>>>>>> 43db2271e2c6cf853b58821ed26bad42012d1c40
 
 CurrentBet = 0
 import sys
@@ -56,16 +61,27 @@ class PokerWindow(QGraphicsView):
         hbox.addStretch(1)
         hbox.addLayout(vbox)
 
+        hand = card_view.HandModel()
+        print(hand.cards)
+        view = card_view.CardView(hand)
 
+        # Creating a small demo window to work with, and put the card_view inside:
+        box = QVBoxLayout()
+        box.addWidget(view)
+        player_view = QGroupBox("Player 1")
+        player_view.setLayout(box)
+        player_view.show()
 
-        final=QVBoxLayout()
+        final = QVBoxLayout()
         final.addLayout(hbox)
+        final.addWidget(view)
 
 
 
         self.setLayout(final)
         self.setGeometry(600, 300, 300, 150)
         self.setWindowTitle('Texas Holdem')
+
 
 
 class Playerwindow(QGroupBox):
@@ -76,8 +92,9 @@ class Playerwindow(QGroupBox):
         self.layout().addWidget(card_view.CardView(player.hand))
         self.stack = QLabel()
         self.layout().addWidget(self.stack)
-        self.player.new_stack.connect(self.update_stack)
-        self.update_stack()
+       # self.player.new_stack.connect(self.update_stack)
+        #self.update_stack()
+
 
     def update_stack(self):
         self.stack.setText('%d $' % self.player.stack)
@@ -85,4 +102,11 @@ class Playerwindow(QGroupBox):
 
 app = QApplication(sys.argv)
 game = PokerWindow()
+game.show()
+app.exec_()
+
+
+
+
+
 

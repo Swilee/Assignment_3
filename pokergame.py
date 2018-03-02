@@ -1,5 +1,6 @@
 from Assignment_3 import poker, Assignment_3_Andreasson_Edman
 import numpy as np
+import sys
 #setup
 
 pot = 0
@@ -18,15 +19,12 @@ class Player(object):
         self.name = playername
         self.cards = []
         self.hand = poker.PlayerHand()
-
+        self.active = 1
 
     def bet(self, amount):
 
-        if amount > self.stack:
-            print('error, you cant bet more than you have')
-        else:
-            self.stack = self.stack - amount
-            self.new_stack.emit()
+        self.stack = self.stack - amount
+        self.new_stack.emit()
 
     def win(self, pot):
         self.stack = self.stack + pot
@@ -34,6 +32,18 @@ class Player(object):
 
     def fold(self):
         self.hand.cards = []
+<<<<<<< HEAD
+=======
+        self.player_fold.emit()
+        self.active = 0
+
+
+
+    def remove_player():
+        player
+        player_fold.connect()
+
+>>>>>>> 43db2271e2c6cf853b58821ed26bad42012d1c40
 
 
 for i in range(0, NumberOfPlayers):
@@ -54,8 +64,16 @@ for i in range(0, 2*NumberOfPlayers):
         Players[i].hand.givecard(card)
 
 
+<<<<<<< HEAD
 #player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 #player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
+=======
+player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
+player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
+
+app =Assignment_3_Andreasson_Edman.QApplication(sys.argv)
+
+>>>>>>> 43db2271e2c6cf853b58821ed26bad42012d1c40
 
 Assignment_3_Andreasson_Edman.game.show()
 Assignment_3_Andreasson_Edman.app.exec_()
