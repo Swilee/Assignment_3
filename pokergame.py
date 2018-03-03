@@ -69,7 +69,14 @@ for i in range(0, 2*NumberOfPlayers):
 
 
 
+
 app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
+
+table = poker.TableModel()
+
+
+
+tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
 
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 print('ok')
@@ -77,11 +84,20 @@ player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 print('ok')
 game = Assignment_3_Andreasson_Edman.PokerWindow()
 print('ok')
-game.Create_GUI(player1box, player2box)
+game.Create_GUI(player1box, player2box, tablebox)
 
 game.show()
 
+for i in range (3):
+    card = Deck.TakeTopCard()
+    table.givecard(card)
+
+
+
+
+
 app.exec_()
+
 
 
 
