@@ -26,7 +26,7 @@ class Player(object):
         self.stack = startingstack
         self.name = playername
         self.cards = []
-        self.hand = poker.PlayerHand()
+        self.hand = poker.Playerhandmodel()
         self.active = 1
 
     def bet(self, amount):

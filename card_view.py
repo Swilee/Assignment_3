@@ -71,12 +71,12 @@ class CardView(QGraphicsView):
         # Whenever the this window should update, it should call the "change_cards" method.
         # This can, for example, be done by connecting it to a signal.
         # The view can listen to changes:
-       # cards_model.data_changed.connect(self.change_cards)
+        cards_model.data_changed.connect(self.change_cards)
         # It is completely optional if you want to do it this way, or have some overreaching Player/GameState
         # call the "change_cards" method instead. z
 
         # Add the cards the first time around to represent the initial state.
-   #     self.change_cards()
+        self.change_cards()
 
     def change_cards(self):
         # Add the cards from scratch
@@ -85,7 +85,7 @@ class CardView(QGraphicsView):
             # The ID of the card in the dictionary of images is a tuple with (value, suit), both integers
             # TODO: YOU MUST CORRECT THE EXPRESSION TO MATCH YOUR PLAYING CARDS!!!
             # TODO: See the __read_cards method for what mapping are used.
-            graphics_key = (card.value, card.suit)
+            graphics_key = (card.value, card.suit.value)
             renderer = self.back_card if self.model.flipped(i) else self.all_cards[graphics_key]
             c = CardItem(renderer, i)
 
@@ -99,7 +99,7 @@ class CardView(QGraphicsView):
             # Place the cards on the default positions
             c.setPos(c.position * self.card_spacing, 0)
             # Sets the opacity of cards if they are marked.
-            c.setOpacity(0.5 if self.model.marked(c.position) else 1.0)
+            #c.setOpacity(0.5 if self.model.marked(c.position) else 1.0)
             self.scene.addItem(c)
 
         self.update_view()

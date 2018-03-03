@@ -1,7 +1,10 @@
 import numpy as np
 from enum import Enum
 from enum import IntEnum
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtSvg import *
 
 
 class Suit(Enum):
@@ -57,7 +60,7 @@ class NumberedCard(PlayingCard):
         self.value = value
         self.suit = suit
         self.uni = Uni[suit.value]
-        self.symbol=str(value)
+        self.symbol = str(value)
 
 
 class JackCard(PlayingCard):
@@ -122,9 +125,10 @@ class PlayerHand:
     The playerhand class can be used to create a player hand. The hand may be given cards, have cards removed,
     sorted and evaluated for the best poker hand.
     """
-    data_changed = pyqtSignal()
+    #data_changed = pyqtSignal()
     def __init__(self):
         self.cards = np.array([])
+
     def __eq__(self, other):
         return self.value == other.value
 
@@ -136,15 +140,50 @@ class PlayerHand:
 
     def givecard(self, card):
         self.cards = np.append(self.cards, card)
-        self.data_changed.emit()
+        #self.data_changed.emit()
         return self.cards
 
     def removecard(self, index):
         self.cards = np.delete(self.cards, index)
-        return self.cards
 
     def sortcards(self):
         return np.sort(self.cards)
+
+class Playerhandmodel(PlayerHand, QObject):
+    data_changed = pyqtSignal()
+    def __init__(self):
+        PlayerHand.__init__(self)
+        QObject.__init__(self)
+
+        self.marked_cards = [False]*len(self.cards)
+        self.flipped_cards = True
+
+
+    def flip(self):
+        # Flips over the cards (to hide them)
+        self.flipped_cards = not self.flipped_cards
+        self.data_changed.emit()
+
+    def marked(self, i):
+        return self.marked_cards[i]
+
+    def flipped(self, i):
+        # This model only flips all or no cards, so we don't care about the index.
+        # Might be different for other games though!
+        return self.flipped_cards
+
+    def clicked_position(self, i):
+        # Mark the card as position "i" to be thrown away
+        self.marked_cards[i] = not self.marked_cards[i]
+        self.data_changed.emit()
+
+    def givecard(self, card):
+        super().givecard(card)
+        self.data_changed.emit()
+
+    def removecard(self, index):
+        super().removecard(index)
+        self.data_changed.emit
 
 
 class Pokerhand():
