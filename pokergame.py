@@ -81,15 +81,7 @@ game.Create_GUI(player1box, player2box)
 
 game.show()
 
-print(game)
-
-
-
-print('ok')
-print('ok')
-
 app.exec_()
-print('ok')
 
 
 
