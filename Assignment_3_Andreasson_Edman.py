@@ -2,17 +2,13 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
-<<<<<<< HEAD
-from Assignment_3 import card_view
-from Assignment_3 import pokergame
-=======
-from Assignment_3 import card_view, poker
 
->>>>>>> 43db2271e2c6cf853b58821ed26bad42012d1c40
+from Assignment_3 import card_view, poker # pokergame
+
 
 CurrentBet = 0
-import sys
-qt_app = QApplication(sys.argv)
+
+
 
 class Tablescene(QGraphicsScene):
     def __init__(self):
@@ -61,27 +57,17 @@ class PokerWindow(QGraphicsView):
         hbox.addStretch(1)
         hbox.addLayout(vbox)
 
-        hand = card_view.HandModel()
-        print(hand.cards)
-        view = card_view.CardView(hand)
-
-        # Creating a small demo window to work with, and put the card_view inside:
-        box = QVBoxLayout()
-        box.addWidget(view)
-        player_view = QGroupBox("Player 1")
-        player_view.setLayout(box)
-        player_view.show()
-
-        final = QVBoxLayout()
-        final.addLayout(hbox)
-        final.addWidget(view)
+        self.hbox = hbox
 
 
-
-        self.setLayout(final)
-        self.setGeometry(600, 300, 300, 150)
-        self.setWindowTitle('Texas Holdem')
-
+    def Create_GUI(self,player1,player2):
+            final = QVBoxLayout()
+            final.addLayout(self.hbox)
+            final.addWidget(player1)
+            final.addWidget(player2)
+            self.setLayout(final)
+            self.setGeometry(600, 300, 300, 150)
+            self.setWindowTitle('Texas Holdem')
 
 
 class Playerwindow(QGroupBox):
@@ -93,17 +79,16 @@ class Playerwindow(QGroupBox):
         self.stack = QLabel()
         self.layout().addWidget(self.stack)
        # self.player.new_stack.connect(self.update_stack)
-        #self.update_stack()
+        self.update_stack()
 
 
     def update_stack(self):
         self.stack.setText('%d $' % self.player.stack)
 
-
-app = QApplication(sys.argv)
-game = PokerWindow()
-game.show()
-app.exec_()
+#app = QApplication(sys.argv)
+#game = PokerWindow()
+#game.show()
+#app.exec_()
 
 
 

@@ -1,7 +1,15 @@
-from Assignment_3 import poker, Assignment_3_Andreasson_Edman
-import numpy as np
+from Assignment_3 import Assignment_3_Andreasson_Edman
+from Assignment_3 import poker, card_view
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtSvg import *
+
 import sys
 #setup
+
+
+
 
 pot = 0
 NumberOfPlayers = 2#int(input('Number of players:'))
@@ -9,8 +17,8 @@ Playername=[None]*NumberOfPlayers
 for i in range(0, NumberOfPlayers):
     Playername[i] = '%s' % str(i+1)  #input('Player %d name:' % (i+1))
 
-STARTINGSTACK =2000 # float(input('Set starting stack amount:'))
-STARTINGBET = 50   #float(input('Set starting bet:'))
+STARTINGSTACK = 2000  # float(input('Set starting stack amount:'))
+STARTINGBET = 50   # float(input('Set starting bet:'))
 ActivePlayers = NumberOfPlayers
 Players = []
 class Player(object):
@@ -53,7 +61,6 @@ Deck.ShuffleDeck()
 
 for i in range(0, 2*NumberOfPlayers):
     card = Deck.TakeTopCard()
-    print(card.symbol)
     if i > NumberOfPlayers-1:
         Players[i-NumberOfPlayers].hand.givecard(card)
     else:
@@ -61,13 +68,32 @@ for i in range(0, 2*NumberOfPlayers):
 
 
 
+
+app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
+
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
+print('ok')
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
+print('ok')
+game = Assignment_3_Andreasson_Edman.PokerWindow()
+print('ok')
+game.Create_GUI(player1box, player2box)
 
-app =Assignment_3_Andreasson_Edman.QApplication(sys.argv)
+game.show()
+
+print(game)
 
 
-Assignment_3_Andreasson_Edman.game.show()
-Assignment_3_Andreasson_Edman.app.exec_()
+
+print('ok')
+print('ok')
+
+app.exec_()
+print('ok')
+
+
+
+#game = Assignment_3_Andreasson_Edman.PokerWindow()
+#game.show()
 
 

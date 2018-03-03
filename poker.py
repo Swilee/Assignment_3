@@ -1,6 +1,7 @@
 import numpy as np
 from enum import Enum
 from enum import IntEnum
+from PyQt5.QtCore import pyqtSignal
 
 
 class Suit(Enum):
@@ -121,6 +122,7 @@ class PlayerHand:
     The playerhand class can be used to create a player hand. The hand may be given cards, have cards removed,
     sorted and evaluated for the best poker hand.
     """
+    data_changed = pyqtSignal()
     def __init__(self):
         self.cards = np.array([])
     def __eq__(self, other):
@@ -134,6 +136,7 @@ class PlayerHand:
 
     def givecard(self, card):
         self.cards = np.append(self.cards, card)
+        self.data_changed.emit()
         return self.cards
 
     def removecard(self, index):
