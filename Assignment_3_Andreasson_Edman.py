@@ -50,7 +50,7 @@ class PokerWindow(QGraphicsView):
         self.vbox = vbox
 
 
-        self.hbox = hbox
+        #self.hbox = hbox
 
 
     def Create_GUI(self,player1,player2,table):
