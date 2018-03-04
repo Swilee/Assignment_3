@@ -185,6 +185,40 @@ class Playerhandmodel(PlayerHand, QObject):
         super().removecard(index)
         self.data_changed.emit
 
+class TableModel(PlayerHand, QObject):
+    data_changed = pyqtSignal()
+    def __init__(self):
+        PlayerHand.__init__(self)
+        QObject.__init__(self)
+
+        self.marked_cards = [False]*len(self.cards)
+        self.flipped_cards = False
+
+    def marked(self, i):
+        return self.marked_cards[i]
+
+    def flipped(self, i):
+        # This model only flips all or no cards, so we don't care about the index.
+        # Might be different for other games though!
+        return self.flipped_cards
+
+    def clicked_position(self, i):
+        # Mark the card as position "i" to be thrown away
+        self.marked_cards[i] = not self.marked_cards[i]
+        self.data_changed.emit()
+
+
+    def givecard(self, card):
+        super().givecard(card)
+        self.data_changed.emit()
+
+    def removecard(self, index):
+        super().removecard(index)
+        self.data_changed.emit
+
+
+
+
 
 class Pokerhand():
     pass

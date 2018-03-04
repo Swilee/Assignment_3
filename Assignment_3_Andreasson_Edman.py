@@ -39,7 +39,7 @@ class PokerWindow(QGraphicsView):
         card4 = QPushButton("kort4")
         card5 = QPushButton("kort5")
 
-        vbox = QVBoxLayout()
+        vbox = QHBoxLayout()
         vbox.addWidget(Potlabel)
         vbox.addWidget(CurrentBetLabel)
         vbox.addWidget(checkbutton)
@@ -47,25 +47,20 @@ class PokerWindow(QGraphicsView):
         vbox.addWidget(betbutton)
         vbox.addStretch(1)
 
-        hbox = QHBoxLayout()
-        hbox.addStretch(1)
-        hbox.addWidget(card1)
-        hbox.addWidget(card2)
-        hbox.addWidget(card3)
-        hbox.addWidget(card4)
-        hbox.addWidget(card5)
-        hbox.addStretch(1)
-        hbox.addLayout(vbox)
+        self.vbox = vbox
 
 
         self.hbox = hbox
 
 
-    def Create_GUI(self,player1,player2):
+    def Create_GUI(self,player1,player2,table):
+
             final = QVBoxLayout()
-            final.addLayout(self.hbox)
+            final.addLayout(self.vbox)
+            final.addWidget(table)
             final.addWidget(player1)
             final.addWidget(player2)
+
             self.setLayout(final)
             self.setGeometry(600, 300, 300, 150)
             self.setWindowTitle('Texas Holdem')
@@ -82,10 +77,14 @@ class Playerwindow(QGroupBox):
        # self.player.new_stack.connect(self.update_stack)
         self.update_stack()
 
-
     def update_stack(self):
         self.stack.setText('%d $' % self.player.stack)
 
+class Tablewindow(QGroupBox):
+    def __init__(self, table):
+        super().__init__()
+        self.setLayout(QHBoxLayout())
+        self.layout().addWidget(card_view.CardView(table))
 
 
 #app = QApplication(sys.argv)
