@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
 
-from Assignment_3 import card_view, poker # pokergame
+from Assignment_3 import card_view, poker
 
 
 CurrentBet = 0
@@ -57,6 +57,7 @@ class PokerWindow(QGraphicsView):
         hbox.addStretch(1)
         hbox.addLayout(vbox)
 
+
         self.hbox = hbox
 
 
@@ -84,6 +85,8 @@ class Playerwindow(QGroupBox):
 
     def update_stack(self):
         self.stack.setText('%d $' % self.player.stack)
+
+
 
 #app = QApplication(sys.argv)
 #game = PokerWindow()

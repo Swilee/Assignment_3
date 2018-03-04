@@ -44,7 +44,6 @@ class Player(object):
         self.player_fold.emit()
         self.active = 0
 
-
     def remove_player():
         player
         player_fold.connect()
