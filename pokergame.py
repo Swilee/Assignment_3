@@ -21,14 +21,22 @@ STARTINGSTACK = 2000  # float(input('Set starting stack amount:'))
 STARTINGBET = 50   # float(input('Set starting bet:'))
 ActivePlayers = NumberOfPlayers
 Players = []
-class Player(object):
+
+
+class Player(QObject):
+    new_stack = pyqtSignal()
     def __init__(self, startingstack, playername):
+        super().__init__()
         self.stack = startingstack
         self.name = playername
         self.cards = []
         self.hand = poker.Playerhandmodel()
         self.active = 1
-
+        #self.dsadsa=Assignment_3_Andreasson_Edman.Buttons().a
+        self.connect(Assignment_3_Andreasson_Edman.Buttons().a, self.SIGNAL('clicked()'), self.remove_player())
+        #self.sda = Assignment_3_Andreasson_Edman.Tablewindow().foldbutton
+        #self.sda.check_press.connect(self.remove_player)
+        #Assignment_3_Andreasson_Edman.Tablewindow().checkbutton.connect(self.remove_player())
     def bet(self, amount):
 
         self.stack = self.stack - amount
@@ -45,9 +53,16 @@ class Player(object):
         self.active = 0
 
 
-    def remove_player():
-        player
-        player_fold.connect()
+    def remove_player(self):
+        print('button got pressed')
+
+
+class Table(QObject):
+    def __init__(self, currentbet, pot):
+        super().__init__()
+        self.CurrentBet = currentbet
+        self.Pot = pot
+        self.hand = poker.TableModel()
 
 
 for i in range(0, NumberOfPlayers):
@@ -58,7 +73,7 @@ for i in range(0, NumberOfPlayers):
 CurrentBet = STARTINGBET
 Deck = poker.Deck()
 Deck.ShuffleDeck()
-
+print('ok')
 for i in range(0, 2*NumberOfPlayers):
     card = Deck.TakeTopCard()
     if i > NumberOfPlayers-1:
@@ -69,15 +84,17 @@ for i in range(0, 2*NumberOfPlayers):
 
 
 
-
+print('ok')
 app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
 
-table = poker.TableModel()
+print('ok')
 
+table = Table(CurrentBet, pot)
 
+print('ok')
 
 tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
-
+#tablebox.checkbutton.clicked.connect(print('button was pressed'))
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 print('ok')
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
@@ -90,7 +107,7 @@ game.show()
 
 for i in range (3):
     card = Deck.TakeTopCard()
-    table.givecard(card)
+    table.hand.givecard(card)
 
 
 

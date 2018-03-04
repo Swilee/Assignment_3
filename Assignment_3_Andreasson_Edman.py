@@ -24,30 +24,16 @@ class PokerWindow(QGraphicsView):
 
         self.scene = Tablescene()
         super().__init__(self.scene)
+        '''
+        if self.checkbutton.isChecked():
+            self.check_press.emit()
 
-        Potlabel = QLabel('Pot = %d $' % 123451)
-        CurrentBetLabel = QLabel('Current bet = %d $' %1)
-        if CurrentBet==0:
-            checkbutton = QPushButton("Check")
-        else:
-            checkbutton = QPushButton("Call")
-        foldbutton = QPushButton("Fold")
-        betbutton = QPushButton("Bet")
-        card1 = QPushButton("kort1")
-        card2 = QPushButton("kort2")
-        card3 = QPushButton("kort3")
-        card4 = QPushButton("kort4")
-        card5 = QPushButton("kort5")
+        if self.betbutton.isChecked():
+            self.bet_press.emit()
 
-        vbox = QHBoxLayout()
-        vbox.addWidget(Potlabel)
-        vbox.addWidget(CurrentBetLabel)
-        vbox.addWidget(checkbutton)
-        vbox.addWidget(foldbutton)
-        vbox.addWidget(betbutton)
-        vbox.addStretch(1)
-
-        self.vbox = vbox
+        if self.foldbutton.isChecked():
+            self.fold_press.emit()
+        '''
 
         #self.hbox = hbox
 
@@ -55,7 +41,7 @@ class PokerWindow(QGraphicsView):
     def Create_GUI(self,player1,player2,table):
 
             final = QVBoxLayout()
-            final.addLayout(self.vbox)
+            #final.addLayout(self.vbox)
             final.addWidget(table)
             final.addWidget(player1)
             final.addWidget(player2)
@@ -73,7 +59,7 @@ class Playerwindow(QGroupBox):
         self.layout().addWidget(card_view.CardView(player.hand))
         self.stack = QLabel()
         self.layout().addWidget(self.stack)
-       # self.player.new_stack.connect(self.update_stack)
+        self.player.new_stack.connect(self.update_stack)
         self.update_stack()
 
     def update_stack(self):
@@ -81,20 +67,44 @@ class Playerwindow(QGroupBox):
 
 
 class Tablewindow(QGroupBox):
+    check_press = pyqtSignal()
+    bet_press = pyqtSignal()
+    fold_press = pyqtSignal()
     def __init__(self, table):
         super().__init__()
         self.setLayout(QHBoxLayout())
-        self.layout().addWidget(card_view.CardView(table))
+        self.layout().addWidget(card_view.CardView(table.hand))
+        self.table = table
+        self.pot = QLabel()
+        self.layout().addWidget(self.pot)
+        self.CurrentBet = QLabel()
+        self.layout().addWidget(self.CurrentBet)
+        self.checkbutton = QPushButton('Check')
+        #self.QObject.connect(self.checkbutton, QtCore.SIGNAL('clicked()'), self.checkbutton_clicked())
+        self.foldbutton = QPushButton("Fold")
+        self.betbutton = QPushButton("Bet")
+        #self.checkbutton.connect(checkbutton_clicked())
+        self.layout().addWidget(self.checkbutton)
+        self.layout().addWidget(self.betbutton)
+        self.layout().addWidget(self.foldbutton)
+        self.update_current_bet()
+        self.update_pot()
 
 
+    def update_current_bet(self):
+        self.CurrentBet.setText('Current bet: %d $' % self.table.CurrentBet)
 
-#app = QApplication(sys.argv)
-#game = PokerWindow()
-#game.show()
-#app.exec_()
+    def update_pot(self):
+        self.pot.setText('Pot: %d $' % self.table.Pot)
+
+    def checkbutton_clicked(self):
+        self.check_press.emit()
+
+class Buttons(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.a = QPushButton('123')
 
 
-
-
-
-
+    def hello(self):
+        print('hello')

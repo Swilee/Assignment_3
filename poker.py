@@ -158,7 +158,6 @@ class Playerhandmodel(PlayerHand, QObject):
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = True
 
-
     def flip(self):
         # Flips over the cards (to hide them)
         self.flipped_cards = not self.flipped_cards
@@ -183,7 +182,7 @@ class Playerhandmodel(PlayerHand, QObject):
 
     def removecard(self, index):
         super().removecard(index)
-        self.data_changed.emit
+        self.data_changed.emit()
 
 class TableModel(PlayerHand, QObject):
     data_changed = pyqtSignal()
@@ -214,7 +213,7 @@ class TableModel(PlayerHand, QObject):
 
     def removecard(self, index):
         super().removecard(index)
-        self.data_changed.emit
+        self.data_changed.emit()
 
 
 
