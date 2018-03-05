@@ -68,7 +68,6 @@ for i in range(0, NumberOfPlayers):
 CurrentBet = STARTINGBET
 Deck = poker.Deck()
 Deck.ShuffleDeck()
-print('ok')
 for i in range(0, 2*NumberOfPlayers):
     card = Deck.TakeTopCard()
     if i > NumberOfPlayers-1:
@@ -78,22 +77,20 @@ for i in range(0, 2*NumberOfPlayers):
 
 
 
-
-print('ok')
 app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
 
-print('ok')
 
 table = Table(CurrentBet, pot)
+print(int(not 1))
+print(int(not 0))
 
-print('ok')
 
 tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
-print('ok')
+
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 game = Assignment_3_Andreasson_Edman.PokerWindow()
-print('ok')
+
 game.Create_GUI(player1box, player2box, tablebox, btn)
 
 game.show()
