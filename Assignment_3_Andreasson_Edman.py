@@ -2,13 +2,13 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
-
+import sys
 from Assignment_3 import card_view, poker # pokergame
 
 
 CurrentBet = 0
 
-
+app=QApplication(sys.argv)
 
 class Tablescene(QGraphicsScene):
     def __init__(self):
@@ -38,10 +38,10 @@ class PokerWindow(QGraphicsView):
         #self.hbox = hbox
 
 
-    def Create_GUI(self,player1,player2,table):
+    def Create_GUI(self,player1,player2,table,btn):
 
             final = QVBoxLayout()
-            #final.addLayout(self.vbox)
+            final.layout().addWidget(btn)
             final.addWidget(table)
             final.addWidget(player1)
             final.addWidget(player2)
@@ -79,20 +79,20 @@ class Tablewindow(QGroupBox):
         self.layout().addWidget(self.pot)
         self.CurrentBet = QLabel()
         self.layout().addWidget(self.CurrentBet)
-        self.checkbutton = QPushButton('Check')
-        #self.QObject.connect(self.checkbutton, QtCore.SIGNAL('clicked()'), self.checkbutton_clicked())
-        self.foldbutton = QPushButton("Fold")
-        self.betbutton = QPushButton("Bet")
-        #self.checkbutton.connect(checkbutton_clicked())
-        self.layout().addWidget(self.checkbutton)
-        self.layout().addWidget(self.betbutton)
-        self.layout().addWidget(self.foldbutton)
+        #self.checkbutton = QPushButton('Check')
+        #self.foldbutton = QPushButton("Fold")
+        #self.betbutton = QPushButton("Bet")
+
+        #self.layout().addWidget(self.checkbutton)
+        #self.layout().addWidget(self.betbutton)
+        #self.layout().addWidget(self.foldbutton)
         self.update_current_bet()
         self.update_pot()
 
 
     def update_current_bet(self):
         self.CurrentBet.setText('Current bet: %d $' % self.table.CurrentBet)
+        self.check_press.emit()
 
     def update_pot(self):
         self.pot.setText('Pot: %d $' % self.table.Pot)
@@ -100,11 +100,27 @@ class Tablewindow(QGroupBox):
     def checkbutton_clicked(self):
         self.check_press.emit()
 
-class Buttons(QMainWindow):
+        self.checkbutton.clicked.connect(self.update_current_bet())
+
+class Buttons(QGroupBox):
+    check_press = pyqtSignal()
+    bet_press = pyqtSignal()
+    fold_press = pyqtSignal()
     def __init__(self):
         super().__init__()
-        self.a = QPushButton('123')
+        self.checkbutton = QPushButton('Check')
+        self.foldbutton = QPushButton("Fold")
+        self.betbutton = QPushButton("Bet")
+        self.setLayout(QVBoxLayout())
 
-
+        self.layout().addWidget(self.checkbutton)
+        self.layout().addWidget(self.foldbutton)
+        self.hello()
+        self.foldbutton.clicked.connect(self.check_press.emit)
+        self.checkbutton.clicked.connect(self.hello)
     def hello(self):
-        print('hello')
+        print('Check')
+        self.check_press.emit()
+
+
+
