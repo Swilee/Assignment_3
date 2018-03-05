@@ -32,8 +32,10 @@ class Player(QObject):
         self.cards = []
         self.hand = poker.Playerhandmodel()
         self.active = 1
+        btn = Assignment_3_Andreasson_Edman.Buttons()
+        btn.check_press.connect(self.remove_player)
         #self.dsadsa=Assignment_3_Andreasson_Edman.Buttons().a
-        self.connect(Assignment_3_Andreasson_Edman.Buttons().a, self.SIGNAL('clicked()'), self.remove_player())
+        #self.connect(Assignment_3_Andreasson_Edman.Buttons().a, self.SIGNAL('clicked()'), self.remove_player())
         #self.sda = Assignment_3_Andreasson_Edman.Tablewindow().foldbutton
         #self.sda.check_press.connect(self.remove_player)
         #Assignment_3_Andreasson_Edman.Tablewindow().checkbutton.connect(self.remove_player())
@@ -55,6 +57,7 @@ class Player(QObject):
 
     def remove_player(self):
         print('button got pressed')
+
 
 
 class Table(QObject):
@@ -99,9 +102,10 @@ player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 print('ok')
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
 print('ok')
+btn=Assignment_3_Andreasson_Edman.Buttons()
 game = Assignment_3_Andreasson_Edman.PokerWindow()
 print('ok')
-game.Create_GUI(player1box, player2box, tablebox)
+game.Create_GUI(player1box, player2box, tablebox, btn)
 
 game.show()
 

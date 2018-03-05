@@ -193,8 +193,13 @@ class TableModel(PlayerHand, QObject):
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = False
 
+
     def marked(self, i):
         return self.marked_cards[i]
+
+
+    def flip(self):
+        pass
 
     def flipped(self, i):
         # This model only flips all or no cards, so we don't care about the index.
