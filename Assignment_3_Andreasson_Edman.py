@@ -41,8 +41,8 @@ class PokerWindow(QGraphicsView):
     def Create_GUI(self,player1,player2,table,btn):
 
             final = QVBoxLayout()
-            final.layout().addWidget(btn)
             final.addWidget(table)
+            final.layout().addWidget(btn)
             final.addWidget(player1)
             final.addWidget(player2)
 
@@ -108,11 +108,12 @@ class Buttons(QGroupBox):
         self.checkbutton = QPushButton('Check')
         self.foldbutton = QPushButton("Fold")
         self.betbutton = QPushButton("Bet")
-        self.setLayout(QVBoxLayout())
+        self.setLayout(QHBoxLayout())
 
         self.layout().addWidget(self.checkbutton)
         self.layout().addWidget(self.foldbutton)
-        self.hello()
+        self.layout().addWidget(self.betbutton)
+
         #self.foldbutton.clicked.connect(self.check_press.emit)
 
         self.checkbutton.clicked.connect(self.hello)
