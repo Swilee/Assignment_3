@@ -65,6 +65,55 @@ for i in range(0, NumberOfPlayers):
     player = Player(STARTINGSTACK, Playername[i], btn)
     Players.append(player)
 
+
+class Gamemaster:
+    def __init__(self):
+        self.starting_player = 0
+        self.deck=poker.Deck()
+        self.deck.ShuffleDeck()
+        self.players = Player
+
+        fold.connect(self.end_of_round)
+
+    def flop(self,table):
+        for i in range(3):
+            card = self.deck.TakeTopCard()
+            table.hand.givecard(card)
+        return table
+
+    def river(self, table):
+
+
+    def end_of_round(self, players):
+        if players[0].stack == 0:
+            print('Player 2 wins')
+            sys.exit()
+        elif players[1].stack==0:
+            print('player 1 wins')
+            sys.exit()
+        else:
+            self.starting_player = int(not self.starting_player)
+            self.deck = poker.Deck()
+            self.deck.ShuffleDeck()
+            players[0].hand.removecard(:)
+            players[1].hand.removecard(:)
+            return players
+
+
+    def change_active_player(self):
+            self.activeplayer = int(not self.activeplayer)
+
+
+    def New_Round(self, players):
+        self.activeplayer = self.starting_player
+        for i in range(0, 2):
+            card = self.deck.TakeTopCard()
+            players[0].hand.givecard(card)
+            card = self.deck.TakeTopCard()
+            players[1].hand.givecard(card)
+        return players
+
+
 #starta
 CurrentBet = STARTINGBET
 Deck = poker.Deck()
