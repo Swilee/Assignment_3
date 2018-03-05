@@ -55,6 +55,7 @@ class Player(QObject):
         self.active = 0
 
 
+
     def remove_player(self):
         print('button got pressed')
 
@@ -87,6 +88,7 @@ for i in range(0, 2*NumberOfPlayers):
 
 
 
+
 print('ok')
 app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
 
@@ -98,6 +100,7 @@ print('ok')
 
 tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
 #tablebox.checkbutton.clicked.connect(print('button was pressed'))
+
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 print('ok')
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
@@ -105,6 +108,7 @@ print('ok')
 btn=Assignment_3_Andreasson_Edman.Buttons()
 game = Assignment_3_Andreasson_Edman.PokerWindow()
 print('ok')
+
 game.Create_GUI(player1box, player2box, tablebox, btn)
 
 game.show()
@@ -114,11 +118,7 @@ for i in range (3):
     table.hand.givecard(card)
 
 
-
-
-
 app.exec_()
-
 
 
 

@@ -3,7 +3,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
 import sys
-from Assignment_3 import card_view, poker # pokergame
+
+
+from Assignment_3 import card_view
 
 
 CurrentBet = 0
@@ -24,28 +26,18 @@ class PokerWindow(QGraphicsView):
 
         self.scene = Tablescene()
         super().__init__(self.scene)
-        '''
-        if self.checkbutton.isChecked():
-            self.check_press.emit()
 
-        if self.betbutton.isChecked():
-            self.bet_press.emit()
 
-        if self.foldbutton.isChecked():
-            self.fold_press.emit()
-        '''
 
-        #self.hbox = hbox
-
+        self.hbox = hbox
 
     def Create_GUI(self,player1,player2,table,btn):
-
             final = QVBoxLayout()
             final.layout().addWidget(btn)
             final.addWidget(table)
+
             final.addWidget(player1)
             final.addWidget(player2)
-
             self.setLayout(final)
             self.setGeometry(600, 300, 300, 150)
             self.setWindowTitle('Texas Holdem')
@@ -61,6 +53,7 @@ class Playerwindow(QGroupBox):
         self.layout().addWidget(self.stack)
         self.player.new_stack.connect(self.update_stack)
         self.update_stack()
+
 
     def update_stack(self):
         self.stack.setText('%d $' % self.player.stack)
@@ -121,6 +114,7 @@ class Buttons(QGroupBox):
     def hello(self):
         print('Check')
         self.check_press.emit()
+
 
 
 
