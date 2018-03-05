@@ -8,7 +8,8 @@ from Assignment_3 import card_view  # poker, pokergame
 
 CurrentBet = 0
 
-app=QApplication(sys.argv)
+app = QApplication(sys.argv)
+
 
 class Tablescene(QGraphicsScene):
     def __init__(self):

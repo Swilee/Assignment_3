@@ -178,8 +178,10 @@ class Playerhandmodel(PlayerHand, QObject):
         super().removecard(index)
         self.data_changed.emit()
 
+
 class TableModel(PlayerHand, QObject):
     data_changed = pyqtSignal()
+
     def __init__(self):
         PlayerHand.__init__(self)
         QObject.__init__(self)
@@ -200,9 +202,6 @@ class TableModel(PlayerHand, QObject):
     def removecard(self, index):
         super().removecard(index)
         self.data_changed.emit()
-
-
-
 
 
 class Pokerhand():
