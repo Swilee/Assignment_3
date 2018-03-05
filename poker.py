@@ -163,18 +163,12 @@ class Playerhandmodel(PlayerHand, QObject):
         self.flipped_cards = not self.flipped_cards
         self.data_changed.emit()
 
-    def marked(self, i):
-        return self.marked_cards[i]
 
     def flipped(self, i):
         # This model only flips all or no cards, so we don't care about the index.
         # Might be different for other games though!
         return self.flipped_cards
 
-    def clicked_position(self, i):
-        # Mark the card as position "i" to be thrown away
-        self.marked_cards[i] = not self.marked_cards[i]
-        self.data_changed.emit()
 
     def givecard(self, card):
         super().givecard(card)
@@ -195,22 +189,11 @@ class TableModel(PlayerHand, QObject):
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = False
 
-    def marked(self, i):
-        return self.marked_cards[i]
-
     def flip(self):
         pass
 
     def flipped(self, i):
-        # This model only flips all or no cards, so we don't care about the index.
-        # Might be different for other games though!
-        return self.flipped_cards
-
-    def clicked_position(self, i):
-        # Mark the card as position "i" to be thrown away
-        self.marked_cards[i] = not self.marked_cards[i]
-        self.data_changed.emit()
-
+        pass
 
     def givecard(self, card):
         super().givecard(card)
