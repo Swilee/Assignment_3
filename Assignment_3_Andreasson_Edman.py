@@ -116,7 +116,8 @@ class Buttons(QGroupBox):
         self.layout().addWidget(self.checkbutton)
         self.layout().addWidget(self.foldbutton)
         self.hello()
-        self.foldbutton.clicked.connect(self.check_press.emit)
+        #self.foldbutton.clicked.connect(self.check_press.emit)
+
         self.checkbutton.clicked.connect(self.hello)
     def hello(self):
         print('Check')

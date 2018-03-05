@@ -25,20 +25,15 @@ Players = []
 
 class Player(QObject):
     new_stack = pyqtSignal()
-    def __init__(self, startingstack, playername):
+    def __init__(self, startingstack, playername, button):
         super().__init__()
         self.stack = startingstack
         self.name = playername
         self.cards = []
         self.hand = poker.Playerhandmodel()
         self.active = 1
-        btn = Assignment_3_Andreasson_Edman.Buttons()
-        btn.check_press.connect(self.remove_player)
-        #self.dsadsa=Assignment_3_Andreasson_Edman.Buttons().a
-        #self.connect(Assignment_3_Andreasson_Edman.Buttons().a, self.SIGNAL('clicked()'), self.remove_player())
-        #self.sda = Assignment_3_Andreasson_Edman.Tablewindow().foldbutton
-        #self.sda.check_press.connect(self.remove_player)
-        #Assignment_3_Andreasson_Edman.Tablewindow().checkbutton.connect(self.remove_player())
+        button.check_press.connect(self.remove_player)
+
     def bet(self, amount):
 
         self.stack = self.stack - amount
@@ -67,9 +62,10 @@ class Table(QObject):
         self.Pot = pot
         self.hand = poker.TableModel()
 
+btn=Assignment_3_Andreasson_Edman.Buttons()
 
 for i in range(0, NumberOfPlayers):
-    player = Player(STARTINGSTACK, Playername[i])
+    player = Player(STARTINGSTACK, Playername[i], btn)
     Players.append(player)
 
 #starta
@@ -97,12 +93,9 @@ table = Table(CurrentBet, pot)
 print('ok')
 
 tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
-#tablebox.checkbutton.clicked.connect(print('button was pressed'))
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
 print('ok')
 player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
-print('ok')
-btn=Assignment_3_Andreasson_Edman.Buttons()
 game = Assignment_3_Andreasson_Edman.PokerWindow()
 print('ok')
 game.Create_GUI(player1box, player2box, tablebox, btn)
