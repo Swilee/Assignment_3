@@ -6,7 +6,9 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
 
 import sys
-#setup
+'''
+Setup
+'''
 
 pot = 0
 NumberOfPlayers = 2#int(input('Number of players:'))
@@ -27,9 +29,7 @@ class Player(QObject):
         super().__init__()
         self.stack = startingstack
         self.name = playername
-        self.cards = []
         self.hand = poker.Playerhandmodel()
-        self.active = 1
         button.check_press.connect(self.remove_player)
         button.fold_press.connect(self.fold)
 
@@ -76,15 +76,11 @@ for i in range(0, 2*NumberOfPlayers):
     else:
         Players[i].hand.givecard(card)
 
-
-
 app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
-
 
 table = Table(CurrentBet, pot)
 print(int(not 1))
 print(int(not 0))
-
 
 tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
 player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
@@ -96,14 +92,11 @@ game.Create_GUI(player1box, player2box, tablebox, btn)
 
 game.show()
 
-for i in range (3):
+for i in range(5):
     card = Deck.TakeTopCard()
     table.hand.givecard(card)
 
 app.exec_()
 
-
 #game = Assignment_3_Andreasson_Edman.PokerWindow()
 #game.show()
-
-
