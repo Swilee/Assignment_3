@@ -102,10 +102,12 @@ class Tablewindow(QGroupBox):
 
         self.checkbutton.clicked.connect(self.update_current_bet())
 
+
 class Buttons(QGroupBox):
     check_press = pyqtSignal()
     bet_press = pyqtSignal()
     fold_press = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.checkbutton = QPushButton('Check')
@@ -119,6 +121,11 @@ class Buttons(QGroupBox):
         #self.foldbutton.clicked.connect(self.check_press.emit)
 
         self.checkbutton.clicked.connect(self.hello)
+        self.foldbutton.clicked.connect(self.foldclick)
+
+    def foldclick(self):
+        self.fold_press.emit()
+
     def hello(self):
         print('Check')
         self.check_press.emit()

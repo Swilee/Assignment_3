@@ -8,9 +8,6 @@ from PyQt5.QtSvg import *
 import sys
 #setup
 
-
-
-
 pot = 0
 NumberOfPlayers = 2#int(input('Number of players:'))
 Playername=[None]*NumberOfPlayers
@@ -33,7 +30,7 @@ class Player(QObject):
         self.hand = poker.Playerhandmodel()
         self.active = 1
         button.check_press.connect(self.remove_player)
-
+        button.fold_press.connect(self.fold)
     def bet(self, amount):
 
         self.stack = self.stack - amount
@@ -44,9 +41,8 @@ class Player(QObject):
         self.new_stack.emit()
 
     def fold(self):
+        print('du har foldat')
         self.hand.cards = []
-
-        self.player_fold.emit()
         self.active = 0
 
 
@@ -106,13 +102,7 @@ for i in range (3):
     card = Deck.TakeTopCard()
     table.hand.givecard(card)
 
-
-
-
-
 app.exec_()
-
-
 
 
 #game = Assignment_3_Andreasson_Edman.PokerWindow()
