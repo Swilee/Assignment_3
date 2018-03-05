@@ -184,8 +184,10 @@ class Playerhandmodel(PlayerHand, QObject):
         super().removecard(index)
         self.data_changed.emit()
 
+
 class TableModel(PlayerHand, QObject):
     data_changed = pyqtSignal()
+
     def __init__(self):
         PlayerHand.__init__(self)
         QObject.__init__(self)
@@ -193,10 +195,8 @@ class TableModel(PlayerHand, QObject):
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = False
 
-
     def marked(self, i):
         return self.marked_cards[i]
-
 
     def flip(self):
         pass
@@ -219,9 +219,6 @@ class TableModel(PlayerHand, QObject):
     def removecard(self, index):
         super().removecard(index)
         self.data_changed.emit()
-
-
-
 
 
 class Pokerhand():

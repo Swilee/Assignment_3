@@ -22,6 +22,7 @@ Players = []
 
 class Player(QObject):
     new_stack = pyqtSignal()
+
     def __init__(self, startingstack, playername, button):
         super().__init__()
         self.stack = startingstack
@@ -31,8 +32,8 @@ class Player(QObject):
         self.active = 1
         button.check_press.connect(self.remove_player)
         button.fold_press.connect(self.fold)
-    def bet(self, amount):
 
+    def bet(self, amount):
         self.stack = self.stack - amount
         self.new_stack.emit()
 
@@ -50,7 +51,6 @@ class Player(QObject):
         print('button got pressed')
 
 
-
 class Table(QObject):
     def __init__(self, currentbet, pot):
         super().__init__()
@@ -58,7 +58,8 @@ class Table(QObject):
         self.Pot = pot
         self.hand = poker.TableModel()
 
-btn=Assignment_3_Andreasson_Edman.Buttons()
+
+btn = Assignment_3_Andreasson_Edman.Buttons()
 
 for i in range(0, NumberOfPlayers):
     player = Player(STARTINGSTACK, Playername[i], btn)
