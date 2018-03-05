@@ -60,6 +60,8 @@ class Playerwindow(QGroupBox):
         self.stack = QLabel()
         self.layout().addWidget(self.stack)
         self.player.new_stack.connect(self.update_stack)
+
+        self.setWindowOpacity(0.1)
         self.update_stack()
 
     def update_stack(self):
@@ -79,13 +81,6 @@ class Tablewindow(QGroupBox):
         self.layout().addWidget(self.pot)
         self.CurrentBet = QLabel()
         self.layout().addWidget(self.CurrentBet)
-        #self.checkbutton = QPushButton('Check')
-        #self.foldbutton = QPushButton("Fold")
-        #self.betbutton = QPushButton("Bet")
-
-        #self.layout().addWidget(self.checkbutton)
-        #self.layout().addWidget(self.betbutton)
-        #self.layout().addWidget(self.foldbutton)
         self.update_current_bet()
         self.update_pot()
 

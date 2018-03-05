@@ -99,7 +99,6 @@ class CardView(QGraphicsView):
             # Place the cards on the default positions
             c.setPos(c.position * self.card_spacing, 0)
             # Sets the opacity of cards if they are marked.
-            print(c.position)
             c.setOpacity(1) #if self.model.marked(c.position) else 1.0)
             self.scene.addItem(c)
 
@@ -135,20 +134,3 @@ class CardView(QGraphicsView):
 # NOTE: You do NOT have to do it this way.
 # You might find it easier to make a Player-model, or a whole GameState-model instead.
 # This is just to make a small demo that you can use. You are free to modify
-
-
-'''
-# Lets test it out
-app = QApplication(sys.argv)
-hand = HandModel()
-
-card_view = CardView(hand)
-
-# Creating a small demo window to work with, and put the card_view inside:
-box = QVBoxLayout()
-box.addWidget(card_view)
-player_view = QGroupBox("Player 1")
-player_view.setLayout(box)
-player_view.show()
-
-app.exec_()'''
