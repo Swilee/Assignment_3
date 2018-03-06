@@ -5,7 +5,6 @@ from PyQt5.QtSvg import *
 import sys
 from Assignment_3 import card_view  # poker, pokergame
 
-
 CurrentBet = 0
 
 app = QApplication(sys.argv)
@@ -19,7 +18,9 @@ class Tablescene(QGraphicsScene):
 
 
 class PokerWindow(QGraphicsView):
-    ''' PokerWindow represents the five cards put on the table and the player options '''
+    '''
+    PokerWindow represents the five cards put on the table and the player options
+    '''
     def __init__(self):
         #super().__init__("Poker content")
 
@@ -35,12 +36,9 @@ class PokerWindow(QGraphicsView):
         if self.foldbutton.isChecked():
             self.fold_press.emit()
         '''
-
         #self.hbox = hbox
 
-
     def Create_GUI(self,player1,player2,table,btn):
-
             final = QVBoxLayout()
             final.addWidget(table)
             final.layout().addWidget(btn)
@@ -48,7 +46,7 @@ class PokerWindow(QGraphicsView):
             final.addWidget(player2)
 
             self.setLayout(final)
-            self.setGeometry(600, 300, 300, 150)
+            self.setGeometry(400, 100, 600, 500)
             self.setWindowTitle('Texas Holdem')
 
 
