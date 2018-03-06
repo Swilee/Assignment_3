@@ -31,10 +31,6 @@ class CardCombo(IntEnum):
     straightflush = 8
 
 Uni = [u'\u2665', u'\u2666',  u'\u2660', u'\u2663']
-#Hearts = u'\u2665'
-#suit.Clubs = u'\u2663'
-#suit.Spades = u'\u2660'
-#suit.Diamonds = u'\u2666'
 
 
 class PlayingCard:
@@ -154,7 +150,7 @@ class Playerhandmodel(PlayerHand, QObject):
     def __init__(self):
         PlayerHand.__init__(self)
         QObject.__init__(self)
-
+        self.card_combo = None
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = True
 
@@ -170,44 +166,7 @@ class Playerhandmodel(PlayerHand, QObject):
         return self.flipped_cards
 
 
-    def givecard(self, card):
-        super().givecard(card)
-        self.data_changed.emit()
-
-    def removecard(self, index):
-        super().removecard(index)
-        self.data_changed.emit()
-
-
-class TableModel(PlayerHand, QObject):
-    data_changed = pyqtSignal()
-
-    def __init__(self):
-        PlayerHand.__init__(self)
-        QObject.__init__(self)
-
-        self.marked_cards = [False]*len(self.cards)
-        self.flipped_cards = False
-
-    def flip(self):
-        pass
-
-    def flipped(self, i):
-        pass
-
-    def givecard(self, card):
-        super().givecard(card)
-        self.data_changed.emit()
-
-    def removecard(self, index):
-        super().removecard(index)
-        self.data_changed.emit()
-
-
-class Pokerhand():
-    pass
-
-    def best_poker_hand(self, cards=[]):
+    def best_poker_hand(self):
         cards = np.append(self.cards, cards)
         value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         suit_count = [0, 0, 0, 0]
@@ -219,38 +178,40 @@ class Pokerhand():
 
         v = self.check_straight_flush(value_count, suit_count)
         if v is not None:
-            return v
+            self.card_combo = v
 
         v = self.check_four_of_a_kind(value_count)
-        if v is not None:
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
 
         v = self.check_full_house(value_count)
-        if v is not None:
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
 
         v = self.check_flush(suit_count)
-        if v is not None:
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
 
         v = self.check_straight(value_count)
-        if v is not None:
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
 
         v = self.check_three_of_a_kind(value_count)
-        if v is not None:
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
 
         v = self.check_two_pair(value_count)
-        if v is not None:
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
 
         v = self.check_one_pair(value_count)
-        if v is not None:
-            return v
-        else:
-            v = CardCombo.highcard
-            return v
+        if v is not None and self.card_combo is None:
+            self.card_combo = v
+
+        if self.card_combo is None:
+            self.card_combo = CardCombo.highcard
+
+        self.highcard = max(self.cards)
 
     @staticmethod
     def check_one_pair(value_count):
@@ -319,6 +280,41 @@ class Pokerhand():
                 else:
                     pass
                 n = n + 1
+
+    def givecard(self, card):
+        super().givecard(card)
+        self.data_changed.emit()
+
+    def removecard(self, index):
+        super().removecard(index)
+        self.data_changed.emit()
+
+
+class TableModel(PlayerHand, QObject):
+    data_changed = pyqtSignal()
+
+    def __init__(self):
+        PlayerHand.__init__(self)
+        QObject.__init__(self)
+
+        self.marked_cards = [False]*len(self.cards)
+        self.flipped_cards = False
+
+    def flip(self):
+        pass
+
+    def flipped(self, i):
+        pass
+
+    def givecard(self, card):
+        super().givecard(card)
+        self.data_changed.emit()
+
+    def removecard(self, index):
+        super().removecard(index)
+        self.data_changed.emit()
+
+
 
 
 
