@@ -4,34 +4,24 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
+import time
 
 import sys
 '''
 Setup
 '''
 
-pot = 0
-NumberOfPlayers = 2#int(input('Number of players:'))
-Playername=[None]*NumberOfPlayers
-for i in range(0, NumberOfPlayers):
-    Playername[i] = '%s' % str(i+1)  #input('Player %d name:' % (i+1))
-
-STARTINGSTACK = 2000  # float(input('Set starting stack amount:'))
-STARTINGBET = 50   # float(input('Set starting bet:'))
-ActivePlayers = NumberOfPlayers
-Players = []
 
 
 class Player(QObject):
     new_stack = pyqtSignal()
-
-    def __init__(self, startingstack, playername, button):
+    def __init__(self, startingstack, playername):
         super().__init__()
         self.stack = startingstack
         self.name = playername
         self.hand = poker.Playerhandmodel()
-        button.check_press.connect(self.remove_player)
-        button.fold_press.connect(self.fold)
+        #button.check_press.connect(self.remove_player)
+        #button.fold_press.connect(self.fold)
 
     def bet(self, amount):
         self.stack = self.stack - amount
@@ -59,21 +49,58 @@ class Table(QObject):
         self.hand = poker.TableModel()
 
 
-btn = Assignment_3_Andreasson_Edman.Buttons()
-
-for i in range(0, NumberOfPlayers):
-    player = Player(STARTINGSTACK, Playername[i], btn)
-    Players.append(player)
 
 
-class Gamemaster:
+
+class Gamemaster(QObject):
+
+    game_start = pyqtSignal()
     def __init__(self):
+        super().__init__()
         self.starting_player = 0
-        self.deck=poker.Deck()
+        self.deck = poker.Deck()
         self.deck.ShuffleDeck()
         self.players = Player
+        self.pot = 0
+        self.NumberOfPlayers = 2  # int(input('Number of players:'))
+        self.Playername = [None] * self.NumberOfPlayers
+        for i in range(0, self.NumberOfPlayers):
+            self.Playername[i] = '%s' % str(i + 1)  # input('Player %d name:' % (i+1))
 
-        fold.connect(self.end_of_round)
+        self.STARTINGSTACK = 2000  # float(input('Set starting stack amount:'))
+        self.STARTINGBET = 50  # float(input('Set starting bet:'))
+        self.ActivePlayers = self.NumberOfPlayers
+        self.Players = []
+        self.CurrentBet = self.STARTINGBET
+        self.table = Table(self.CurrentBet, self.pot)
+        self.btn = Assignment_3_Andreasson_Edman.Buttons()
+
+
+        for i in range(0, self.NumberOfPlayers):
+            player = Player(self.STARTINGSTACK, self.Playername[i])
+            self.Players.append(player)
+
+
+        for i in range(0, 2 * self.NumberOfPlayers):
+            card = self.deck.TakeTopCard()
+            if i > self.NumberOfPlayers - 1:
+                self.Players[i - self.NumberOfPlayers].hand.givecard(card)
+            else:
+                self.Players[i].hand.givecard(card)
+
+
+
+        #fold.connect(self.end_of_round)
+
+    def start(self):
+        self.app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
+        self.tablebox = Assignment_3_Andreasson_Edman.Tablewindow(self.table)
+        self.player1box = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[0])
+        self.player2box = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[1])
+        self.game = Assignment_3_Andreasson_Edman.PokerWindow()
+        self.game.Create_GUI(self.player1box, self.player2box, self.tablebox, self.btn)
+        self.game.show()
+        self.app.exec_()
 
     def flop(self,table):
         for i in range(3):
@@ -82,7 +109,7 @@ class Gamemaster:
         return table
 
     def river(self, table):
-        
+        a
 
     def end_of_round(self, players):
         if players[0].stack == 0:
@@ -95,8 +122,8 @@ class Gamemaster:
             self.starting_player = int(not self.starting_player)
             self.deck = poker.Deck()
             self.deck.ShuffleDeck()
-            players[0].hand.removecard(:)
-            players[1].hand.removecard(:)
+            self.Players[0].hand.removecard(all)
+            self.Players[1].hand.removecard(all)
             return players
 
 
@@ -115,37 +142,7 @@ class Gamemaster:
 
 
 #starta
-CurrentBet = STARTINGBET
-Deck = poker.Deck()
-Deck.ShuffleDeck()
-for i in range(0, 2*NumberOfPlayers):
-    card = Deck.TakeTopCard()
-    if i > NumberOfPlayers-1:
-        Players[i-NumberOfPlayers].hand.givecard(card)
-    else:
-        Players[i].hand.givecard(card)
-
-app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
-
-table = Table(CurrentBet, pot)
-print(int(not 1))
-print(int(not 0))
-
-tablebox = Assignment_3_Andreasson_Edman.Tablewindow(table)
-player1box = Assignment_3_Andreasson_Edman.Playerwindow(Players[0])
-
-player2box = Assignment_3_Andreasson_Edman.Playerwindow(Players[1])
-game = Assignment_3_Andreasson_Edman.PokerWindow()
-
-game.Create_GUI(player1box, player2box, tablebox, btn)
-
-game.show()
-
-for i in range(5):
-    card = Deck.TakeTopCard()
-    table.hand.givecard(card)
-
-app.exec_()
+Gamemaster().start()
 
 #game = Assignment_3_Andreasson_Edman.PokerWindow()
 #game.show()
