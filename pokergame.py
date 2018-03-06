@@ -80,7 +80,7 @@ class Gamemaster:
         return table
 
     def river(self, table):
-
+        
 
     def end_of_round(self, players):
         if players[0].stack == 0:
