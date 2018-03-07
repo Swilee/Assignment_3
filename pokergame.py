@@ -112,10 +112,7 @@ class Gamemaster(QObject):
             else:
                 self.winner = 0
             self.win()
-<<<<<<< HEAD
 
-=======
->>>>>>> 562e63a4bd81029a7f52ff74d9cb77cf37d98508
 
 
     def check_or_call(self):

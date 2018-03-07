@@ -167,7 +167,7 @@ class Playerhandmodel(PlayerHand, QObject):
 
     def best_poker_hand(self, cards):
         cards = np.append(self.cards, cards)
-        value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         suit_count = [0, 0, 0, 0]
         for card in cards:
             val = card.value
@@ -268,8 +268,7 @@ class Playerhandmodel(PlayerHand, QObject):
             for i in value_count:
                 if n == 10:
                     return
-                else:
-                    pass
+
                 if i != 0:
                     if value_count[n + 1] != 0:
                         if value_count[n + 2] != 0:
