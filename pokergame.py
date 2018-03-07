@@ -19,6 +19,7 @@ class Player(QObject):
         self.stack = startingstack
         self.name = playername
         self.hand = poker.Playerhandmodel()
+        self.current_bet = 0
         #button.check_press.connect(self.remove_player)
         #button.fold_press.connect(self.fold)
 
@@ -52,6 +53,7 @@ class Gamemaster(QObject):
         self.ActivePlayers = self.NumberOfPlayers
         self.Playername = [None] * self.NumberOfPlayers
 
+
         for i in range(0, self.NumberOfPlayers):
             self.Playername[i] = '%s' % str(i + 1)  # input('Player %d name:' % (i+1))
 
@@ -66,7 +68,6 @@ class Gamemaster(QObject):
             player = Player(self.STARTINGSTACK, self.Playername[i])
             self.Players.append(player)
         self.Players[self.starting_player].hand.active=1
-
         for i in range(0, 2 * self.NumberOfPlayers):
             card = self.deck.TakeTopCard()
             if i > self.NumberOfPlayers - 1:
@@ -86,6 +87,8 @@ class Gamemaster(QObject):
 
 
     def round_controller(self):
+        self.Players[0].current_bet = 0
+        self.Players[1].current_bet = 0
         self.first_action = True
         if not (self.activeplayer == self.starting_player):
             self.change_player.emit()
@@ -109,7 +112,10 @@ class Gamemaster(QObject):
             else:
                 self.winner = 0
             self.win()
+<<<<<<< HEAD
 
+=======
+>>>>>>> 562e63a4bd81029a7f52ff74d9cb77cf37d98508
 
 
     def check_or_call(self):
@@ -123,16 +129,17 @@ class Gamemaster(QObject):
         else:
             if not self.first_action:
                 amount = self.table.CurrentBet
-                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount
-                self.table.Pot = self.table.Pot+amount
+                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[self.activeplayer].current_bet
+                self.table.Pot = self.table.Pot+amount - self.Players[self.activeplayer].current_bet
                 self.table.CurrentBet = amount
                 self.Players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
                 self.next_round.emit()
             else:
                 amount = self.table.CurrentBet
-                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount
-                self.table.Pot = self.table.Pot+amount
+                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[
+                self.activeplayer].current_bet
+                self.table.Pot = self.table.Pot + amount - self.Players[self.activeplayer].current_bet
                 self.table.CurrentBet = amount
                 self.Players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
@@ -140,7 +147,7 @@ class Gamemaster(QObject):
                 self.change_player.emit()
 
     def bet(self):
-        if self.Players[self.activeplayer].stack>self.table.CurrentBet:
+        if self.Players[self.activeplayer].stack+self.Players[self.activeplayer].current_bet>self.table.CurrentBet:
              amount, ok = QInputDialog.getInt(QInputDialog(), 'Bet', 'Enter bet (min = %d, max = %d)' % (
              self.table.CurrentBet+1, self.Players[self.activeplayer].stack), min=self.table.CurrentBet+1,
                                          max=self.Players[self.activeplayer].stack)
@@ -149,9 +156,10 @@ class Gamemaster(QObject):
             amount = self.Players[self.activeplayer].stack
             ok = True
         if ok:
-            self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount
-            self.table.Pot = self.table.Pot+amount
+            self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[self.activeplayer].current_bet
+            self.table.Pot = self.table.Pot + amount - self.Players[self.activeplayer].current_bet
             self.table.CurrentBet = amount
+            self.Players[self.activeplayer].current_bet = amount
             self.first_action = False
             self.Players[self.activeplayer].new_stack.emit()
             self.table.new_pot_or_bet.emit()
