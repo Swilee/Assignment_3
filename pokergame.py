@@ -12,8 +12,6 @@ import sys
 Setup
 '''
 
-
-
 class Player(QObject):
     new_stack = pyqtSignal()
     def __init__(self, startingstack, playername):
@@ -62,7 +60,7 @@ class Gamemaster(QObject):
 
         self.Players = []
         self.table = Table(self.STARTINGBET, 0)
-        self.activeplayer=0
+        self.activeplayer = 0
         self.first_action = True
         self.round = 0
 
@@ -95,24 +93,26 @@ class Gamemaster(QObject):
         if not (self.activeplayer == self.starting_player):
             self.change_player.emit()
         if self.round == 0:
+            self.round = self.round + 1
             pass
         elif self.round == 1:
+            self.round = self.round + 1
             self.flop()
         elif self.round == 2:
+            self.round = self.round + 1
             self.river()
         elif self.round == 3:
+            self.round = self.round + 1
             self.river()
         elif self.round == 4:
             self.Players[0].hand.best_poker_hand(self.table.hand.cards)
             self.Players[1].hand.best_poker_hand(self.table.hand.cards)
-            if self.Players[0].hand > self.Players[0].hand:
-                self.winner = 0
-            if self.Players[0].hand < self.Players[0].hand:
+            if self.Players[0].hand < self.Players[1].hand:
                 self.winner = 1
-            self.winner= max(self.Players[0].hand, self.Players[1].hand)
+            else:
+                self.winner = 0
             self.win()
 
-        self.round=self.round + 1
 
     def check_or_call(self):
 
@@ -164,7 +164,7 @@ class Gamemaster(QObject):
     def win(self):
         self.Players[self.winner].stack = self.Players[self.winner].stack + self.table.Pot
         QMessageBox.information(QMessageBox(), 'Player won',
-                                   'Congratulations, %s won %d $' % (self.Players[self.winner].name, self.table.Pot), QMessageBox.Ok)
+                                   'Congratulations, player %s won %d $' % (self.Players[self.winner].name, self.table.Pot), QMessageBox.Ok)
         self.Players[self.winner].new_stack.emit()
         self.next_hand.emit()
 
@@ -172,7 +172,7 @@ class Gamemaster(QObject):
         self.Players[not int(self.activeplayer)].stack = self.Players[not int(self.activeplayer)].stack + self.table.Pot
         self.Players[not int(self.activeplayer)].new_stack.emit()
         QMessageBox.information(QMessageBox(), 'Player won',
-                                   'Congratulations, %s won ' % self.Players[not int(self.activeplayer)].name, QMessageBox.Ok)
+                                   'Congratulations, player %s won ' % self.Players[not int(self.activeplayer)].name, QMessageBox.Ok)
 
         self.table.new_pot_or_bet.emit()
         self.next_hand.emit()

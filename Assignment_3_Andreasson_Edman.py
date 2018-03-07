@@ -46,7 +46,7 @@ class PokerWindow(QGraphicsView):
 
             self.setLayout(final)
             self.setGeometry(400, 100, 600, 500)
-            self.setWindowTitle('Texas Holdem')
+            self.setWindowTitle("Texas Hold'em")
 
 
 class Playerwindow(QGroupBox):
