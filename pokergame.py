@@ -109,7 +109,6 @@ class Gamemaster(QObject):
             else:
                 self.winner = 0
             self.win()
-            print(self.round)
 
 
 
