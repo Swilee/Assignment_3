@@ -21,6 +21,7 @@ class Player(QObject):
         self.stack = startingstack
         self.name = playername
         self.hand = poker.Playerhandmodel()
+        self.current_bet = 0
         #button.check_press.connect(self.remove_player)
         #button.fold_press.connect(self.fold)
 
@@ -54,6 +55,7 @@ class Gamemaster(QObject):
         self.ActivePlayers = self.NumberOfPlayers
         self.Playername = [None] * self.NumberOfPlayers
 
+
         for i in range(0, self.NumberOfPlayers):
             self.Playername[i] = '%s' % str(i + 1)  # input('Player %d name:' % (i+1))
 
@@ -68,7 +70,6 @@ class Gamemaster(QObject):
             player = Player(self.STARTINGSTACK, self.Playername[i])
             self.Players.append(player)
         self.Players[self.starting_player].hand.active=1
-
         for i in range(0, 2 * self.NumberOfPlayers):
             card = self.deck.TakeTopCard()
             if i > self.NumberOfPlayers - 1:
@@ -88,6 +89,8 @@ class Gamemaster(QObject):
 
 
     def round_controller(self):
+        self.Players[0].current_bet = 0
+        self.Players[1].current_bet = 0
         self.first_action = True
         if not (self.activeplayer == self.starting_player):
             self.change_player.emit()
@@ -100,9 +103,16 @@ class Gamemaster(QObject):
         elif self.round == 3:
             self.river()
         elif self.round == 4:
-            self.Players[0].hand.best_poker_hand()
-            self.Players[1].hand.best_poker_hand()
-        self.round = self.round+1
+            self.Players[0].hand.best_poker_hand(self.table.hand.cards)
+            self.Players[1].hand.best_poker_hand(self.table.hand.cards)
+            if self.Players[0].hand > self.Players[0].hand:
+                self.winner = 0
+            if self.Players[0].hand < self.Players[0].hand:
+                self.winner = 1
+            self.winner= max(self.Players[0].hand, self.Players[1].hand)
+            self.win()
+
+        self.round=self.round + 1
 
     def check_or_call(self):
 
@@ -115,16 +125,17 @@ class Gamemaster(QObject):
         else:
             if not self.first_action:
                 amount = self.table.CurrentBet
-                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount
-                self.table.Pot = self.table.Pot+amount
+                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[self.activeplayer].current_bet
+                self.table.Pot = self.table.Pot+amount - self.Players[self.activeplayer].current_bet
                 self.table.CurrentBet = amount
                 self.Players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
                 self.next_round.emit()
             else:
                 amount = self.table.CurrentBet
-                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount
-                self.table.Pot = self.table.Pot+amount
+                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[
+                self.activeplayer].current_bet
+                self.table.Pot = self.table.Pot + amount - self.Players[self.activeplayer].current_bet
                 self.table.CurrentBet = amount
                 self.Players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
@@ -132,18 +143,19 @@ class Gamemaster(QObject):
                 self.change_player.emit()
 
     def bet(self):
-        if self.Players[self.activeplayer].stack>self.table.CurrentBet:
+        if self.Players[self.activeplayer].stack+self.Players[self.activeplayer].current_bet>self.table.CurrentBet:
              amount, ok = QInputDialog.getInt(QInputDialog(), 'Bet', 'Enter bet (min = %d, max = %d)' % (
-             self.table.CurrentBet, self.Players[self.activeplayer].stack), min=self.table.CurrentBet,
+             self.table.CurrentBet+1, self.Players[self.activeplayer].stack), min=self.table.CurrentBet+1,
                                          max=self.Players[self.activeplayer].stack)
              amount = int(amount)
         else:
             amount = self.Players[self.activeplayer].stack
             ok = True
         if ok:
-            self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount
-            self.table.Pot = self.table.Pot+amount
+            self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[self.activeplayer].current_bet
+            self.table.Pot = self.table.Pot + amount - self.Players[self.activeplayer].current_bet
             self.table.CurrentBet = amount
+            self.Players[self.activeplayer].current_bet = amount
             self.first_action = False
             self.Players[self.activeplayer].new_stack.emit()
             self.table.new_pot_or_bet.emit()
@@ -215,13 +227,18 @@ class Gamemaster(QObject):
 
 
     def change_active_player(self):
+        self.Players[self.activeplayer].hand.flipped_cards = True
+        self.Players[self.activeplayer].hand.data_changed.emit()
         self.Players[self.activeplayer].playerbox.set_to_inactive()
         self.activeplayer = int(not self.activeplayer)
         self.Players[self.activeplayer].playerbox.set_to_active()
         self.Players[0].hand.active = not self.Players[0].hand.active
         self.Players[1].hand.active = not self.Players[1].hand.active
 
+
     def new_hand(self):
+        self.Players[self.activeplayer].hand.flipped_cards = True
+        self.Players[self.activeplayer].hand.data_changed.emit()
         self.starting_player =int(not self.starting_player)
         if not (self.activeplayer == self.starting_player):
             self.change_player.emit()

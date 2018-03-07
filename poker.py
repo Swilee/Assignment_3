@@ -136,8 +136,6 @@ class PlayerHand:
 
     def givecard(self, card):
         self.cards = np.append(self.cards, card)
-        #self.data_changed.emit()
-        return self.cards
 
     def removecard(self, index):
         self.cards = np.delete(self.cards, index)
