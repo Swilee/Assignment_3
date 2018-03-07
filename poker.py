@@ -126,13 +126,13 @@ class PlayerHand:
         self.cards = np.array([])
 
     def __eq__(self, other):
-        return self.value == other.value
+        return self.card_combo.value == other.card_combo.value
 
     def __lt__(self, other):
-        return self.value < other.value
+        return self.card_combo.value < other.card_combo.value
 
     def __gt__(self, other):
-        return self.value > other.value
+        return self.card_combo.value > other.card_combo.value
 
     def givecard(self, card):
         self.cards = np.append(self.cards, card)
@@ -151,6 +151,7 @@ class Playerhandmodel(PlayerHand, QObject):
         PlayerHand.__init__(self)
         QObject.__init__(self)
         self.card_combo = None
+        self.active = 0
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = True
 
@@ -166,7 +167,7 @@ class Playerhandmodel(PlayerHand, QObject):
         return self.flipped_cards
 
 
-    def best_poker_hand(self):
+    def best_poker_hand(self, cards):
         cards = np.append(self.cards, cards)
         value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         suit_count = [0, 0, 0, 0]
