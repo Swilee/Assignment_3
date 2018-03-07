@@ -58,12 +58,18 @@ class Playerwindow(QGroupBox):
         self.stack = QLabel()
         self.layout().addWidget(self.stack)
         self.player.new_stack.connect(self.update_stack)
-
-        self.setWindowOpacity(0.1)
+        self.active = QLabel()
+        self.layout().addWidget(self.active)
         self.update_stack()
 
     def update_stack(self):
         self.stack.setText('%d $' % self.player.stack)
+
+    def set_to_active(self):
+        self.active.setText('Your turn')
+
+    def set_to_inactive(self):
+        self.active.setText('Waiting for other player')
 
 
 class Tablewindow(QGroupBox):
@@ -94,7 +100,6 @@ class Buttons(QGroupBox):
         self.foldbutton = QPushButton("Fold")
         self.betbutton = QPushButton("Bet")
         self.setLayout(QHBoxLayout())
-
         self.layout().addWidget(self.checkbutton)
         self.layout().addWidget(self.foldbutton)
         self.layout().addWidget(self.betbutton)

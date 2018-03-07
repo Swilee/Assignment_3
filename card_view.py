@@ -20,7 +20,7 @@ class TableScene(QGraphicsScene):
     """ A scene with a table cloth background """
     def __init__(self):
         super().__init__()
-        self.tile = QPixmap('cards/table.png')
+        self.tile = QPixmap('table.png')
         self.setBackgroundBrush(QBrush(self.tile))
 
 
@@ -52,7 +52,6 @@ class CardView(QGraphicsView):
     # We read all the card graphics as static class variables
     back_card = QSvgRenderer('cards/Red_Back_2.svg')
     all_cards = __read_cards()
-
     def __init__(self, cards_model, card_spacing=250, padding=10):
         """
         Initializes the view to display the content of the given model
@@ -74,7 +73,6 @@ class CardView(QGraphicsView):
         cards_model.data_changed.connect(self.change_cards)
         # It is completely optional if you want to do it this way, or have some overreaching Player/GameState
         # call the "change_cards" method instead. z
-
         # Add the cards the first time around to represent the initial state.
         self.change_cards()
 
@@ -124,13 +122,6 @@ class CardView(QGraphicsView):
 
     # You can remove these events if you don't need them.
     def mouseDoubleClickEvent(self, event):
-        self.model.flip() # Another possible event. Lets add it to the flip functionality for fun!
+        if self.model.active:
+            self.model.flip() # Another possible event. Lets add it to the flip functionality for fun!
 
-
-# A trivial card class (you should use the stuff you made in your library instead!
-
-
-# We can extend this class to create a model, which updates the view whenever it has changed.
-# NOTE: You do NOT have to do it this way.
-# You might find it easier to make a Player-model, or a whole GameState-model instead.
-# This is just to make a small demo that you can use. You are free to modify
