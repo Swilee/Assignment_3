@@ -30,7 +30,6 @@ class CardCombo(IntEnum):
     fourofakind = 7
     straightflush = 8
 
-Uni = [u'\u2665', u'\u2666',  u'\u2660', u'\u2663']
 
 
 class PlayingCard:
@@ -47,47 +46,57 @@ class PlayingCard:
     def __eq__(self, other):
         return self.value == other.value
 
+    def __str__(self):
+        return '%s %s' %(self.symbol , self.uni)
+
+    def __init__(self):
+        self.Uni = [u'\u2665', u'\u2666', u'\u2660', u'\u2663']
 
 class NumberedCard(PlayingCard):
     """
     In this class the playingcards without a suit are represented.
     """
     def __init__(self, value, suit):
+        super().__init__()
         self.value = value
         self.suit = suit
-        self.uni = Uni[suit.value]
+        self.uni = self.Uni[suit.value]
         self.symbol = str(value)
 
 
 class JackCard(PlayingCard):
     def __init__(self, suit):
+        super().__init__()
         self.suit = suit
         self.value = 11
-        self.uni = Uni[suit.value]
+        self.uni = self.Uni[suit.value]
         self.symbol = 'J'
 
 
 class QueenCard(PlayingCard):
     def __init__(self, suit):
+        super().__init__()
         self.suit = suit
         self.value = 12
-        self.uni = Uni[suit.value]
+        self.uni = self.Uni[suit.value]
         self.symbol = 'Q'
 
 
 class KingCard(PlayingCard):
     def __init__(self, suit):
+        super().__init__()
         self.suit = suit
         self.value = 13
-        self.uni = Uni[suit.value]
+        self.uni = self.Uni[suit.value]
         self.symbol = 'K'
 
 
 class AceCard(PlayingCard):
     def __init__(self, suit):
+        super().__init__()
         self.suit = suit
         self.value = 14
-        self.uni = (Uni[suit.value])
+        self.uni = self.Uni[suit.value]
         self.symbol = 'A'
 
 
@@ -167,12 +176,8 @@ class Playerhandmodel(PlayerHand, QObject):
 
     def best_poker_hand(self, cards):
         cards = np.append(self.cards, cards)
-<<<<<<< HEAD
         value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-=======
         self.card_combo = None
-        value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
->>>>>>> e1c29fa91465927ac6cbedb91938a428fc228de7
         suit_count = [0, 0, 0, 0]
         for card in cards:
             val = card.value
@@ -316,8 +321,6 @@ class TableModel(PlayerHand, QObject):
     def removecard(self, index):
         super().removecard(index)
         self.data_changed.emit()
-
-
 
 
 

@@ -114,9 +114,6 @@ class Gamemaster(QObject):
                 self.win()
             elif self.Players[0].hand > self.Players[1].hand:
                 self.winner = 0
-<<<<<<< HEAD
-            self.win()
-=======
                 self.win()
             elif self.Players[0].hand == self.Players[1].hand:
                 if self.Players[0].hand.highcard > self.Players[1].hand.highcard:
@@ -127,9 +124,6 @@ class Gamemaster(QObject):
                     self.win()
                 else:
                     self.draw()
-
->>>>>>> e1c29fa91465927ac6cbedb91938a428fc228de7
-
 
 
     def check_or_call(self):
