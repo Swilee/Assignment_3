@@ -2,7 +2,7 @@ import numpy as np
 from enum import Enum
 from enum import IntEnum
 from PyQt5.QtCore import *
-
+from abc import ABC, abstractmethod
 
 class Suit(Enum):
     """
@@ -29,8 +29,7 @@ class CardCombo(IntEnum):
     straightflush = 8
 
 
-
-class PlayingCard:
+class PlayingCard(ABC):
     """
     Here a playingcard class is defined to be comparable.
     """
@@ -44,15 +43,17 @@ class PlayingCard:
     def __eq__(self, other):
         return self.value == other.value
 
+    @abstractmethod
     def give_value(self):
-        pass
-        #return self.value
+        raise NotImplementedError
 
     def __str__(self):
         return '%s %s' %(self.symbol , self.uni)
 
     def __init__(self):
         self.Uni = [u'\u2665', u'\u2666', u'\u2660', u'\u2663']
+
+
 
 class NumberedCard(PlayingCard):
     """
@@ -65,6 +66,8 @@ class NumberedCard(PlayingCard):
         self.uni = self.Uni[suit.value]
         self.symbol = str(value)
 
+    def give_value(self):
+        return self.value
 
 class JackCard(PlayingCard):
     def __init__(self, suit):
@@ -74,6 +77,8 @@ class JackCard(PlayingCard):
         self.uni = self.Uni[suit.value]
         self.symbol = 'J'
 
+    def give_value(self):
+        return self.value
 
 class QueenCard(PlayingCard):
     def __init__(self, suit):
@@ -83,6 +88,8 @@ class QueenCard(PlayingCard):
         self.uni = self.Uni[suit.value]
         self.symbol = 'Q'
 
+    def give_value(self):
+        return self.value
 
 class KingCard(PlayingCard):
     def __init__(self, suit):
@@ -92,6 +99,8 @@ class KingCard(PlayingCard):
         self.uni = self.Uni[suit.value]
         self.symbol = 'K'
 
+    def give_value(self):
+        return self.value
 
 class AceCard(PlayingCard):
     def __init__(self, suit):
@@ -100,6 +109,9 @@ class AceCard(PlayingCard):
         self.value = 14
         self.uni = self.Uni[suit.value]
         self.symbol = 'A'
+
+    def give_value(self):
+        return self.value
 
 
 class Deck(object):
@@ -318,5 +330,4 @@ class TableModel(PlayerHand, QObject):
     def remove_card(self, index):
         super().remove_card(index)
         self.data_changed.emit()
-
 
