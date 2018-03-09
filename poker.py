@@ -114,10 +114,10 @@ class Deck(object):
             deck = np.append(deck, AceCard(Suit(j)))
         self.deck = deck
 
-    def ShuffleDeck(self):
+    def shuffle_deck(self):
         np.random.shuffle(self.deck)
 
-    def TakeTopCard(self):
+    def take_top_card(self):
         topcard = self.deck[-1]
         self.deck = np.delete(self.deck, -1)
 
@@ -152,7 +152,7 @@ class PlayerHand:
         return np.sort(self.cards)
 
 
-class Playerhandmodel(PlayerHand, QObject):
+class PlayerHandModel(PlayerHand, QObject):
     data_changed = pyqtSignal()
 
     def __init__(self):
