@@ -18,7 +18,7 @@ class Player(QObject):
         super().__init__()
         self.stack = startingstack
         self.name = playername
-        self.hand = poker.Playerhandmodel()
+        self.hand = poker.PlayerHandModel()
         self.current_bet = 0
 
 
@@ -41,7 +41,7 @@ class GameMaster(QObject):
         super().__init__()
         self.starting_player = 0
         self.deck = poker.Deck()
-        self.deck.ShuffleDeck()
+        self.deck.shuffle_deck()
         self.players = Player
         self.NumberOfPlayers = 2  # int(input('Number of players:'))
         self.STARTINGSTACK = 2000  # float(input('Set starting stack amount:'))
@@ -63,7 +63,7 @@ class GameMaster(QObject):
             self.Players.append(player)
         self.Players[self.starting_player].hand.active=1
         for i in range(0, 2 * self.NumberOfPlayers):
-            card = self.deck.TakeTopCard()
+            card = self.deck.take_top_card()
             if i > self.NumberOfPlayers - 1:
                 self.Players[i - self.NumberOfPlayers].hand.givecard(card)
             else:
@@ -232,7 +232,7 @@ class GameMaster(QObject):
         else:
             self.table.Pot = 0
             self.deck = poker.Deck()
-            self.deck.ShuffleDeck()
+            self.deck.shuffle_deck()
             self.Players[0].hand.removecard(np.s_[:])
             self.Players[1].hand.removecard(np.s_[:])
             self.table.hand.removecard(np.s_[:])
