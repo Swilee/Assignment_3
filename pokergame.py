@@ -31,7 +31,7 @@ class Table(QObject):
         self.Pot = pot
         self.hand = poker.TableModel()
 
-class Gamemaster(QObject):
+class GameMaster(QObject):
     next_hand = pyqtSignal()
     game_start = pyqtSignal()
     change_player = pyqtSignal()
@@ -264,4 +264,4 @@ class Gamemaster(QObject):
         self.next_round.emit()
 
 
-Gamemaster().start()
+GameMaster().start()
