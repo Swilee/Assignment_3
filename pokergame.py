@@ -65,9 +65,9 @@ class GameMaster(QObject):
         for i in range(0, 2 * self.NumberOfPlayers):
             card = self.deck.take_top_card()
             if i > self.NumberOfPlayers - 1:
-                self.Players[i - self.NumberOfPlayers].hand.givecard(card)
+                self.Players[i - self.NumberOfPlayers].hand.give_card(card)
             else:
-                self.Players[i].hand.givecard(card)
+                self.Players[i].hand.give_card(card)
 
         self.btn = Assignment_3_Andreasson_Edman.Buttons()
         self.btn.betbutton.clicked.connect(self.bet)
@@ -212,12 +212,12 @@ class GameMaster(QObject):
         self.table.new_pot_or_bet.emit()
         for i in range(0, 3):
             card = self.deck.take_top_card()
-            self.table.hand.givecard(card)
+            self.table.hand.give_card(card)
 
     def river(self):
         self.table.CurrentBet = 0
         card = self.deck.take_top_card()
-        self.table.hand.givecard(card)
+        self.table.hand.give_card(card)
         self.table.new_pot_or_bet.emit()
 
     def end_of_hand(self):
@@ -233,9 +233,9 @@ class GameMaster(QObject):
             self.table.Pot = 0
             self.deck = poker.Deck()
             self.deck.shuffle_deck()
-            self.Players[0].hand.removecard(np.s_[:])
-            self.Players[1].hand.removecard(np.s_[:])
-            self.table.hand.removecard(np.s_[:])
+            self.Players[0].hand.remove_card(np.s_[:])
+            self.Players[1].hand.remove_card(np.s_[:])
+            self.table.hand.remove_card(np.s_[:])
             self.new_hand()
 
     def change_active_player(self):
@@ -258,9 +258,9 @@ class GameMaster(QObject):
         self.table.new_pot_or_bet.emit()
         for i in range(0, 2):
             card = self.deck.take_top_card()
-            self.Players[0].hand.givecard(card)
+            self.Players[0].hand.give_card(card)
             card = self.deck.take_top_card()
-            self.Players[1].hand.givecard(card)
+            self.Players[1].hand.give_card(card)
         self.next_round.emit()
 
 
