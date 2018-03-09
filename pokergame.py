@@ -12,6 +12,7 @@ Setup
 
 
 class Player(QObject):
+
     new_stack = pyqtSignal()
 
     def __init__(self, startingstack, playername):

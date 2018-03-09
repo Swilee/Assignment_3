@@ -46,13 +46,13 @@ class PlayingCard:
 
     def give_value(self):
         pass
-        #return self.value
 
     def __str__(self):
         return '%s %s' %(self.symbol , self.uni)
 
     def __init__(self):
         self.Uni = [u'\u2665', u'\u2666', u'\u2660', u'\u2663']
+
 
 class NumberedCard(PlayingCard):
     """
@@ -67,6 +67,9 @@ class NumberedCard(PlayingCard):
 
 
 class JackCard(PlayingCard):
+    '''
+    The JackCard class represents the jack card
+    '''
     def __init__(self, suit):
         super().__init__()
         self.suit = suit

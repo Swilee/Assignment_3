@@ -36,7 +36,7 @@ class CardView(QGraphicsView):
     """ A View widget that represents the table area displaying a players cards. """
 
     # Underscores indicate a private function/method!
-    def __read_cards(): # Ignore the PyCharm warning on this line. It's correct.
+    def __read_cards():  # Ignore the PyCharm warning on this line. It's correct.
         """
         Reads all the 52 cards from files.
         :return: Dictionary of SVG renderers
