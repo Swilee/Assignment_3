@@ -101,8 +101,6 @@ class GameMaster(QObject):
         elif self.round == 4:
             self.Players[0].hand.best_poker_hand(self.table.hand.cards)
             self.Players[1].hand.best_poker_hand(self.table.hand.cards)
-            print(self.Players[0].hand.card_combo.value)
-            print(self.Players[1].hand.card_combo.value)
             if self.Players[0].hand < self.Players[1].hand:
                 self.winner = 1
                 self.win()
@@ -148,25 +146,38 @@ class GameMaster(QObject):
                 self.change_player.emit()
 
     def bet(self):
-        if self.Players[self.activeplayer].stack+self.Players[self.activeplayer].current_bet>self.table.CurrentBet:
-             amount, ok = QInputDialog.getInt(QInputDialog(), 'Bet', 'Enter bet (min = %d, max = %d)' % (
-             self.table.CurrentBet+1, min(self.Players[self.activeplayer].stack, self.Players[int(not self.activeplayer)].stack)), min=self.table.CurrentBet+1,
-                                            max=min(self.Players[self.activeplayer].stack, self.Players[int(not self.activeplayer)].stack))
-             amount = int(amount)
+        if self.Players[self.activeplayer].stack == 0:
+            QMessageBox.information(QMessageBox(), 'Betting error',
+                                    'Unable to place bet: You have no money')
+
+        elif self.Players[int(not self.activeplayer)].stack == 0:
+            QMessageBox.information(QMessageBox(), 'Betting error',
+                                    'Unable to place bet: Opponent has no money')
+
         else:
-            amount = self.Players[self.activeplayer].stack
-            ok = True
-        if ok:
-            self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[self.activeplayer].current_bet
-            self.table.Pot = self.table.Pot + amount - self.Players[self.activeplayer].current_bet
-            self.table.CurrentBet = amount
-            self.Players[self.activeplayer].current_bet = amount
-            self.first_action = False
-            self.Players[self.activeplayer].new_stack.emit()
-            self.table.new_pot_or_bet.emit()
-            self.change_player.emit()
+            if self.Players[self.activeplayer].stack+self.Players[self.activeplayer].current_bet > self.table.CurrentBet:
+                limits = [self.Players[self.activeplayer].stack + self.Players[self.activeplayer].current_bet,
+                          self.Players[int(not self.activeplayer)].stack + self.Players[
+                              int(not self.activeplayer)].current_bet]
+                amount, ok = QInputDialog.getInt(QInputDialog(), 'Bet', 'Enter bet (min = %d, max = %d)' % (
+                    self.table.CurrentBet+1, min(limits)), min=self.table.CurrentBet+1, max=min(limits))
+
+                amount = int(amount)
+            else:
+                amount = self.Players[self.activeplayer].stack + self.Players[self.activeplayer].current_bet
+                ok = True
+            if ok:
+                self.Players[self.activeplayer].stack = self.Players[self.activeplayer].stack - amount + self.Players[self.activeplayer].current_bet
+                self.table.Pot = self.table.Pot + amount - self.Players[self.activeplayer].current_bet
+                self.table.CurrentBet = amount
+                self.Players[self.activeplayer].current_bet = amount
+                self.first_action = False
+                self.Players[self.activeplayer].new_stack.emit()
+                self.table.new_pot_or_bet.emit()
+                self.change_player.emit()
 
     def win(self):
+
         self.Players[self.winner].stack = self.Players[self.winner].stack + self.table.Pot
         QMessageBox.information(QMessageBox(), 'Player won',
                                    'Congratulations, player %s won %d $' % (self.Players[self.winner].name, self.table.Pot), QMessageBox.Ok)
@@ -179,15 +190,16 @@ class GameMaster(QObject):
         self.Players[0].new_stack.emit()
         self.Players[1].new_stack.emit()
         QMessageBox.information(QMessageBox(),
-                                   'Draw', 'No Player won', QMessageBox.Ok)
+                                   'Draw', 'No Player won')
         self.next_hand.emit()
 
 
     def fold(self):
+
         self.Players[not int(self.activeplayer)].stack = self.Players[not int(self.activeplayer)].stack + self.table.Pot
         self.Players[not int(self.activeplayer)].new_stack.emit()
         QMessageBox.information(QMessageBox(), 'Player won',
-                                   'Congratulations, player %s won ' % self.Players[not int(self.activeplayer)].name, QMessageBox.Ok)
+                                   'Congratulations, player %s won ' % self.Players[not int(self.activeplayer)].name)
 
         self.table.new_pot_or_bet.emit()
         self.next_hand.emit()
@@ -224,11 +236,11 @@ class GameMaster(QObject):
     def end_of_hand(self):
         if self.Players[0].stack == 0:
             QMessageBox.information(QMessageBox(), 'Game ended',
-                                    'Congratulations, player 2 won the game', QMessageBox.Ok)
+                                    'Congratulations, player 2 won the game', QMessageBox.Close)
             sys.exit()
         elif self.Players[1].stack == 0:
             QMessageBox.information(QMessageBox(), 'Game ended',
-                                    'Congratulations, player 2 won the game', QMessageBox.Ok)
+                                    'Congratulations, player 2 won the game', QMessageBox.Close)
             sys.exit()
         else:
             self.table.Pot = 0
@@ -254,7 +266,7 @@ class GameMaster(QObject):
         self.starting_player =int(not self.starting_player)
         if not (self.activeplayer == self.starting_player):
             self.change_player.emit()
-        self.table.CurrentBet = self.STARTINGBET
+        self.table.CurrentBet = min(self.STARTINGBET, self.Players[0].stack, self.Players[1].stack)
         self.round = 0
         self.table.new_pot_or_bet.emit()
         for i in range(0, 2):
