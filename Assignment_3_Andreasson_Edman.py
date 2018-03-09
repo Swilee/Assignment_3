@@ -26,6 +26,7 @@ class PokerWindow(QGraphicsView):
 
         self.scene = Tablescene()
         super().__init__(self.scene)
+
         '''
         if self.checkbutton.isChecked():
             self.check_press.emit()
@@ -43,7 +44,6 @@ class PokerWindow(QGraphicsView):
             final.addWidget(player1)
             final.addWidget(player2)
             final.scene = self.scene
-
             self.setLayout(final)
             self.setGeometry(400, 100, 600, 500)
             self.setWindowTitle("Texas Hold'em")
@@ -73,6 +73,7 @@ class Playerwindow(QGroupBox):
 
 
 class Tablewindow(QGroupBox):
+    quitter = pyqtSignal()
     def __init__(self, table):
         super().__init__()
         self.setLayout(QHBoxLayout())
@@ -86,6 +87,7 @@ class Tablewindow(QGroupBox):
         self.layout().addLayout(self.vbox)
         self.update_pot_and_bet()
         self.table.new_pot_or_bet.connect(self.update_pot_and_bet)
+
 
     def update_pot_and_bet(self):
         self.pot.setText('Pot: %d $' % self.table.Pot)

@@ -2,9 +2,6 @@ import numpy as np
 from enum import Enum
 from enum import IntEnum
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtSvg import *
 
 
 class Suit(Enum):
@@ -15,6 +12,7 @@ class Suit(Enum):
     Spades = 2
     Diamonds = 1
     Clubs = 3
+
 
 class CardCombo(IntEnum):
     """
@@ -45,6 +43,10 @@ class PlayingCard:
 
     def __eq__(self, other):
         return self.value == other.value
+
+    def give_value(self):
+        pass
+        #return self.value
 
     def __str__(self):
         return '%s %s' %(self.symbol , self.uni)
@@ -112,11 +114,8 @@ class Deck(object):
             deck = np.append(deck, AceCard(Suit(j)))
         self.deck = deck
 
-
     def ShuffleDeck(self):
         np.random.shuffle(self.deck)
-
-
 
     def TakeTopCard(self):
         topcard = self.deck[-1]
@@ -152,8 +151,10 @@ class PlayerHand:
     def sortcards(self):
         return np.sort(self.cards)
 
+
 class Playerhandmodel(PlayerHand, QObject):
     data_changed = pyqtSignal()
+
     def __init__(self):
         PlayerHand.__init__(self)
         QObject.__init__(self)
@@ -172,6 +173,7 @@ class Playerhandmodel(PlayerHand, QObject):
         # This model only flips all or no cards, so we don't care about the index.
         # Might be different for other games though!
         return self.flipped_cards
+
 
 
     def best_poker_hand(self, cards):
@@ -304,15 +306,10 @@ class TableModel(PlayerHand, QObject):
     def __init__(self):
         PlayerHand.__init__(self)
         QObject.__init__(self)
+        self.active = 0
 
-        self.marked_cards = [False]*len(self.cards)
-        self.flipped_cards = False
-
-    def flip(self):
-        pass
-
-    def flipped(self, i):
-        pass
+    def flipped(self, i):       #since card_view.py will call this function, it is left in the code but without effect
+        pass                    #this is instead of changing card_view.py to do differently for different input
 
     def givecard(self, card):
         super().givecard(card)
@@ -321,7 +318,5 @@ class TableModel(PlayerHand, QObject):
     def removecard(self, index):
         super().removecard(index)
         self.data_changed.emit()
-
-
 
 

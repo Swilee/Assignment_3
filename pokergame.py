@@ -1,35 +1,30 @@
 from Assignment_3 import Assignment_3_Andreasson_Edman
-from Assignment_3 import poker, card_view
+from Assignment_3 import poker
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import numpy as np
-from PyQt5.QtSvg import *
-import time
 
 import sys
+
 '''
 Setup
 '''
 
+
 class Player(QObject):
     new_stack = pyqtSignal()
+
     def __init__(self, startingstack, playername):
         super().__init__()
         self.stack = startingstack
         self.name = playername
         self.hand = poker.Playerhandmodel()
         self.current_bet = 0
-        #button.check_press.connect(self.remove_player)
-        #button.fold_press.connect(self.fold)
-
-
-    def remove_player(self):
-        print('button got pressed')
 
 
 class Table(QObject):
     new_pot_or_bet = pyqtSignal()
+
     def __init__(self, currentbet, pot):
         super().__init__()
         self.CurrentBet = currentbet
@@ -41,6 +36,7 @@ class Gamemaster(QObject):
     game_start = pyqtSignal()
     change_player = pyqtSignal()
     next_round = pyqtSignal()
+
     def __init__(self):
         super().__init__()
         self.starting_player = 0
@@ -53,10 +49,8 @@ class Gamemaster(QObject):
         self.ActivePlayers = self.NumberOfPlayers
         self.Playername = [None] * self.NumberOfPlayers
 
-
         for i in range(0, self.NumberOfPlayers):
             self.Playername[i] = '%s' % str(i + 1)  # input('Player %d name:' % (i+1))
-
 
         self.Players = []
         self.table = Table(self.STARTINGBET, 0)
@@ -84,7 +78,6 @@ class Gamemaster(QObject):
         self.game_start.connect(self.round_controller)
         self.change_player.connect(self.change_active_player)
         self.next_round.connect(self.round_controller)
-
 
     def round_controller(self):
         self.Players[0].current_bet = 0
@@ -125,7 +118,6 @@ class Gamemaster(QObject):
                 else:
                     self.draw()
 
-
     def check_or_call(self):
 
         if self.table.CurrentBet == 0:
@@ -158,7 +150,7 @@ class Gamemaster(QObject):
         if self.Players[self.activeplayer].stack+self.Players[self.activeplayer].current_bet>self.table.CurrentBet:
              amount, ok = QInputDialog.getInt(QInputDialog(), 'Bet', 'Enter bet (min = %d, max = %d)' % (
              self.table.CurrentBet+1, min(self.Players[self.activeplayer].stack, self.Players[int(not self.activeplayer)].stack)), min=self.table.CurrentBet+1,
-                                         max=min(self.Players[self.activeplayer].stack, self.Players[int(not self.activeplayer)].stack))
+                                            max=min(self.Players[self.activeplayer].stack, self.Players[int(not self.activeplayer)].stack))
              amount = int(amount)
         else:
             amount = self.Players[self.activeplayer].stack
@@ -221,10 +213,6 @@ class Gamemaster(QObject):
         for i in range(0, 3):
             card = self.deck.TakeTopCard()
             self.table.hand.givecard(card)
-        #self.first_action = True
-        #self.activeplayer = self.starting_player
-        #self.Player[self.activeplayer].hand.active = 1
-
 
     def river(self):
         self.table.CurrentBet = 0
@@ -250,7 +238,6 @@ class Gamemaster(QObject):
             self.table.hand.removecard(np.s_[:])
             self.new_hand()
 
-
     def change_active_player(self):
         self.Players[self.activeplayer].hand.flipped_cards = True
         self.Players[self.activeplayer].hand.data_changed.emit()
@@ -259,7 +246,6 @@ class Gamemaster(QObject):
         self.Players[self.activeplayer].playerbox.set_to_active()
         self.Players[0].hand.active = not self.Players[0].hand.active
         self.Players[1].hand.active = not self.Players[1].hand.active
-
 
     def new_hand(self):
         self.Players[self.activeplayer].hand.flipped_cards = True
@@ -276,7 +262,6 @@ class Gamemaster(QObject):
             card = self.deck.TakeTopCard()
             self.Players[1].hand.givecard(card)
         self.next_round.emit()
-
 
 
 Gamemaster().start()

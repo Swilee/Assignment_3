@@ -118,9 +118,6 @@ class CardView(QGraphicsView):
         super().resizeEvent(painter)
 
     # This is the Controller part of the GUI, handling input events that modify the Model
-
-
-    # You can remove these events if you don't need them.
     def mouseDoubleClickEvent(self, event):
         if self.model.active:
             self.model.flip() # Another possible event. Lets add it to the flip functionality for fun!
