@@ -142,13 +142,13 @@ class PlayerHand:
     def __gt__(self, other):
         return self.card_combo.value > other.card_combo.value
 
-    def givecard(self, card):
+    def give_card(self, card):
         self.cards = np.append(self.cards, card)
 
-    def removecard(self, index):
+    def remove_card(self, index):
         self.cards = np.delete(self.cards, index)
 
-    def sortcards(self):
+    def sort_cards(self):
         return np.sort(self.cards)
 
 
@@ -291,12 +291,12 @@ class PlayerHandModel(PlayerHand, QObject):
                     pass
                 n = n + 1
 
-    def givecard(self, card):
-        super().givecard(card)
+    def give_card(self, card):
+        super().give_card(card)
         self.data_changed.emit()
 
-    def removecard(self, index):
-        super().removecard(index)
+    def remove_card(self, index):
+        super().remove_card(index)
         self.data_changed.emit()
 
 
@@ -311,12 +311,12 @@ class TableModel(PlayerHand, QObject):
     def flipped(self, i):       #since card_view.py will call this function, it is left in the code but without effect
         pass                    #this is instead of changing card_view.py to do differently for different input
 
-    def givecard(self, card):
-        super().givecard(card)
+    def give_card(self, card):
+        super().give_card(card)
         self.data_changed.emit()
 
-    def removecard(self, index):
-        super().removecard(index)
+    def remove_card(self, index):
+        super().remove_card(index)
         self.data_changed.emit()
 
 
