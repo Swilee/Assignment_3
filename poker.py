@@ -14,6 +14,23 @@ class Suit(Enum):
     Clubs = 3
 
 
+class HighCard(IntEnum):
+
+    two = 2
+    three = 3
+    four = 4
+    five = 5
+    six = 6
+    seven = 7
+    eight = 8
+    nine = 9
+    ten = 10
+    jack = 11
+    queen = 12
+    king = 13
+    ace = 14
+
+
 class CardCombo(IntEnum):
     """
     Here an enum class is created to represent the different values of pokenhands.
@@ -27,6 +44,7 @@ class CardCombo(IntEnum):
     fullhouse = 6
     fourofakind = 7
     straightflush = 8
+
 
 
 class PlayingCard(ABC):
@@ -148,13 +166,19 @@ class PlayerHand:
         self.cards = np.array([])
 
     def __eq__(self, other):
-        return self.card_combo.value == other.card_combo.value
+        return self.card_combo.value == other.card_combo.value and self.highcard == other.highcard
 
     def __lt__(self, other):
-        return self.card_combo.value < other.card_combo.value
+        if self.card_combo.value == other.card_combo.value:
+            return self.highcard < other.highcard
+        else:
+            return self.card_combo.value < other.card_combo.value
 
     def __gt__(self, other):
-        return self.card_combo.value > other.card_combo.value
+        if self.card_combo.value == other.card_combo.value:
+            return self.highcard > other.highcard
+        else:
+            return self.card_combo.value > other.card_combo.value
 
     def give_card(self, card):
         self.cards = np.append(self.cards, card)
@@ -176,6 +200,7 @@ class PlayerHandModel(PlayerHand, QObject):
         self.active = 0
         self.marked_cards = [False]*len(self.cards)
         self.flipped_cards = True
+        self.card_combo = PokerHand(self.cards)
 
     def flip(self):
         # Flips over the cards (to hide them)
@@ -188,20 +213,31 @@ class PlayerHandModel(PlayerHand, QObject):
         # Might be different for other games though!
         return self.flipped_cards
 
+    def give_card(self, card):
+        super().give_card(card)
+        self.data_changed.emit()
+
+    def remove_card(self, index):
+        super().remove_card(index)
+        self.data_changed.emit()
 
 
     def best_poker_hand(self, cards):
         cards = np.append(self.cards, cards)
-        value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        value_count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.card_combo = None
+        suit_card_connector = [None]*14
         suit_count = [0, 0, 0, 0]
+
         for card in cards:
             val = card.value
-            value_count[val-2] += 1
+            value_count[val-1] += 1
             suit = card.suit
             suit_count[suit.value] += 1
+            suit_card_connector[val - 1] = card.suit
 
-        v = self.check_straight_flush(value_count, suit_count)
+
+        v = self.check_straight_flush(suit_card_connector, suit_count)
         if v is not None:
             self.card_combo = v
 
@@ -235,83 +271,120 @@ class PlayerHandModel(PlayerHand, QObject):
 
         if self.card_combo is None:
             self.card_combo = CardCombo.highcard
+            card_values_temp = np.sort(cards)
+            card_vales = card_values_temp[-5:]
 
-        self.highcard = max(self.cards)
 
     @staticmethod
     def check_one_pair(value_count):
         if 2 in value_count:
-            return CardCombo.onepair
+            card_values = [value_count.index(2)+1]*2
+            card_values[value_count.index(2)] = 0
+
+            for j, data in reversed(list(enumerate(value_count))):
+                if data != 0:
+                    card_values.append([j+1]*data)
+
+            return CardCombo.onepair, card_values[0:5]
 
     @staticmethod
     def check_two_pair(value_count):
         if value_count.count(2) >= 2:
-            return CardCombo.twopair
+            #lägg till det största paret först i card_values samt ta bort det för att kunna ta det näst högsta paret
+            pairs = []
+            single_cards = []
+            for j, data in reversed(list(enumerate(value_count))):
+                if data == 2:
+                    pairs.append([j+1])
+                elif data == 1:
+                    single_cards.append([j+1])
 
+            card_values = [pairs[:2],single_cards[0]]
+            #lägg till det andra paret samt högsta kortet
+
+            return CardCombo.twopair, card_values
 
     @staticmethod
     def check_three_of_a_kind(value_count):
         if 3 in value_count:
-            return CardCombo.threeofakind
+
+            single_cards = []
+            for j, data in reversed(list(enumerate(value_count))):
+                if data == 1:
+                    single_cards.append([j + 1])
+            card_values = [value_count.index(3) + 1] * 3 + [single_cards[:2]]
+            return CardCombo.threeofakind, card_values
 
     @staticmethod
     def check_straight(value_count):
-        n = 0
-        for i in value_count:
-            if n == 10:
+        n = 14
+        next()
+        if value_count[13] != 0:
+            value_count[0] = 1
+        for i in reversed(value_count):
+            if n == 3:
                 return
-            else:
-                pass
             if i != 0:
-                if value_count[n + 1] != 0:
-                    if value_count[n + 2] != 0:
-                        if value_count[n + 3] != 0:
-                            if value_count[n + 4] != 0:
-                                return CardCombo.straight
-            else:
-                pass
-            n = n + 1
+                if value_count[n - 1] != 0:
+                    if value_count[n - 2] != 0:
+                        if value_count[n - 3] != 0:
+                            if value_count[n - 4] != 0:
+                                card_values = [n]
+                                return CardCombo.straight, card_values
+            n -= 1
 
     @staticmethod
-    def check_flush(suit_count):
-        if 5 in suit_count:
-            return CardCombo.flush
+    def check_flush(suit_count, suit_card_connector):
+        if max(suit_count) >= 5:
+            card_values = []
+            active_suit = suit_count.index(max(suit_count))
+            for j, card in reversed(enumerate(suit_card_connector)):
+                if card == active_suit:
+                    card_values.append([j+1])
+
+            return CardCombo.flush, card_values[:5]
 
     @staticmethod
     def check_full_house(value_count):
         if 3 in value_count:
-            if 2 in value_count:
-                return CardCombo.fullhouse
+            card_values = []
+            for j, data in reversed(list(enumerate(value_count))):
+                if data == 3:
+                    card_values.append([j+1])
+            if len(card_values) == 2:
+                return CardCombo.fullhouse, card_values
+            elif 2 in value_count:
+                for j, data in reversed(list(enumerate(value_count))):
+                    if data == 2:
+                        card_values.append([j + 1])
+                        return CardCombo.fullhouse, card_values
 
     @staticmethod
     def check_four_of_a_kind(value_count):
         if 4 in value_count:
-            return CardCombo.fourofakind
+            for j, data in reversed(list(enumerate(value_count))):
+                if data in range(1, 4):
+                    card_values = [value_count.index(4)+1, j+1]
+                    return CardCombo.fourofakind, card_values
+
+
     @staticmethod
-    def check_straight_flush(value_count, suit_count):
-        if 5 in suit_count:
-            n = 0
-            for i in value_count:
-                if n == 10:
+    def check_straight_flush(suit_card_connector, suit_count):
+        if max(suit_count) >= 5:
+            active_suit = suit_count.index(max(suit_count))
+            if suit_card_connector[13] == active_suit:
+                suit_card_connector[0] = active_suit
+            for i, data in reversed(enumerate(suit_card_connector)):
+                if i == 3:
                     return
+                if data != 0:
+                    if suit_card_connector[i-1] == active_suit:
+                        if suit_card_connector[i-2] == active_suit:
+                            if suit_card_connector[i-3] == active_suit:
+                                if suit_card_connector[i-4] == active_suit:
+                                    card_values = [i+1]
+                                    return CardCombo.straightflush, card_values
 
-                if i != 0:
-                    if value_count[n + 1] != 0:
-                        if value_count[n + 2] != 0:
-                            if value_count[n + 3] != 0:
-                                if value_count[n + 4] != 0:
-                                    return CardCombo.straightflush
-                else:
-                    pass
-                n = n + 1
-
-    def give_card(self, card):
-        super().give_card(card)
-        self.data_changed.emit()
-
-    def remove_card(self, index):
-        super().remove_card(index)
-        self.data_changed.emit()
 
 
 class TableModel(PlayerHand, QObject):
@@ -333,3 +406,13 @@ class TableModel(PlayerHand, QObject):
         super().remove_card(index)
         self.data_changed.emit()
 
+
+class PokerHand:
+    def __init__(self,highcard, cardcombo):
+        self.highcard = HighCard(highcard)
+        self.cardcombo = CardCombo(cardcombo)
+
+j= PokerHand(3)
+k=j.set_attributes(5, 4)
+print(k)
+print(type(k))
