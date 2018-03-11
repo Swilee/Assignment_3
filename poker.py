@@ -294,13 +294,17 @@ class PlayerHandModel(PlayerHand, QObject):
 
 
         self.pokerhand = PokerHand(self.card_combo, self.card_values)
-        
+
 
 
 
 
     @staticmethod
     def high_card(value_count):
+        ''' Checks for the 5 highest cards in a pokerhand
+        :param value_count: list containing the how many of each card is in the hand
+        :return  list of the 5 highest cards
+        '''
         card_values = []
         for j, data in reversed(list(enumerate(value_count))):
             if data == 1:
@@ -309,6 +313,12 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_one_pair(value_count):
+        '''
+        Checks for a pair in a pokerhand
+        :param value_count: list containing the how many of each card is in the hand
+        :return  None if no pair is found, else 1 ( value of a pair) and a list with the
+        pair and the 3 highest cards exluding the pair
+        '''
         if 2 in value_count:
             card_values = [value_count.index(2)+1]
             for j, data in reversed(list(enumerate(value_count))):
@@ -320,6 +330,12 @@ class PlayerHandModel(PlayerHand, QObject):
             return None, None
     @staticmethod
     def check_two_pair(value_count):
+        '''
+        Checks for the highest two pair in a pokerhand
+        :param value_count: list containing the how many of each card is in the hand
+        :return  None if no two pair is found, else 2 ( the value of a two pair) and
+        a list with the pairs and the highest card exluding the two pair
+        '''
         if value_count.count(2) >= 2:
             #lägg till det största paret först i card_values samt ta bort det för att kunna ta det näst högsta paret
             pairs = []
@@ -341,6 +357,12 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_three_of_a_kind(value_count):
+        '''
+        Checks for a three of a kind in a pokerhand
+        :param value_count: list containing the how many of each card is in the hand
+        :return  None if no two pair is found, else 3 ( the value of a three of a kind) and
+        a list with the pairs and the twp highest cards exluding the three of a kind
+        '''
         if 3 in value_count:
             single_cards = []
             for j, data in reversed(list(enumerate(value_count))):
@@ -353,6 +375,10 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_straight(value_count):
+        ''' Checks for the highest straight in a pokerhand
+        :param value_count: list containing the how many of each card is in the hand
+        :return  None if no two pair is found, else 4 ( the value of a two pair) and
+        the highest card in the straight'''
         n = 13
         if value_count[13] != 0:
             value_count[0] = 1
@@ -370,6 +396,13 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_flush(suit_count, suit_card_connector):
+        ''' Checks for the highest flush in a pokerhand
+        :param suit_count: number of cards of each suit
+        :param suit_card_connector: list containing how many of each card with the most common suit
+        is in the hand
+        :return  None if no flush is found, else 5 ( the value of a flush) and a list of the five
+         highest cards in the flush
+        '''
         if max(suit_count) >= 5:
             card_values = []
             for j, card in reversed(list(enumerate(suit_card_connector))):
@@ -381,6 +414,10 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_full_house(value_count):
+        ''' Checks for the best full house in a pokerhand
+                 :param value_count: list containing the how many of each card is in the hand
+                 :return  None if no full house is found, else 6 ( the value of a full house) and
+                 a list with the three of a kind and the pair'''
         if 3 in value_count:
             card_values = []
             for j, data in reversed(list(enumerate(value_count))):
@@ -400,6 +437,11 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_four_of_a_kind(value_count):
+        ''' Checks for a four of a kind in a pokerhand
+                 :param value_count: list containing the how many of each card is in the hand
+                 :return  None if no four of a kind is found, else 7 ( the value of a two pair) and
+                 a list with the four of a kind and the highest card exluding the four of a kind
+                 '''
         if 4 in value_count:
             for j, data in reversed(list(enumerate(value_count))):
                 if data in range(1, 4):
@@ -411,6 +453,13 @@ class PlayerHandModel(PlayerHand, QObject):
 
     @staticmethod
     def check_straight_flush(suit_card_connector, suit_count):
+        ''' Checks for the highest straight flush in a pokerhand
+        :param suit_count: number of cards of each suit
+        :param suit_card_connector: list containing how many of each card with the most common suit
+        is in the hand
+        :return  None if no straight flush is found, else 8 ( the value of a straight flush) and
+                 the highest card in the straight flush
+        '''
         if max(suit_count) >= 5:
             if suit_card_connector[13]:
                 suit_card_connector[0] = True
