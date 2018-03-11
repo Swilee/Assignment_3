@@ -59,7 +59,7 @@ class Playerwindow(QGroupBox):
 
 
 class Tablewindow(QGroupBox):
-    quitter = pyqtSignal()
+
     def __init__(self, table):
         super().__init__()
         self.setLayout(QHBoxLayout())

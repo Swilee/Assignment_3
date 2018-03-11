@@ -294,7 +294,7 @@ class PlayerHandModel(PlayerHand, QObject):
 
 
         self.pokerhand = PokerHand(self.card_combo, self.card_values)
-
+        
 
 
 
