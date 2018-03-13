@@ -4,6 +4,7 @@ from enum import IntEnum
 from PyQt5.QtCore import *
 from abc import ABC, abstractmethod
 
+
 class Suit(Enum):
     """
     Here an enum class is created to represent the suits.
@@ -68,10 +69,11 @@ class NumberedCard(PlayingCard):
     def give_value(self):
         return self.value
 
+
 class JackCard(PlayingCard):
-    '''
+    """
     The JackCard class represents the jack card
-    '''
+    """
     def __init__(self, suit):
         super().__init__()
         self.suit = suit
@@ -81,6 +83,7 @@ class JackCard(PlayingCard):
 
     def give_value(self):
         return self.value
+
 
 class QueenCard(PlayingCard):
     def __init__(self, suit):
@@ -93,6 +96,7 @@ class QueenCard(PlayingCard):
     def give_value(self):
         return self.value
 
+
 class KingCard(PlayingCard):
     def __init__(self, suit):
         super().__init__()
@@ -103,6 +107,7 @@ class KingCard(PlayingCard):
 
     def give_value(self):
         return self.value
+
 
 class AceCard(PlayingCard):
     def __init__(self, suit):
@@ -182,13 +187,10 @@ class PlayerHandModel(PlayerHand, QObject):
         self.flipped_cards = not self.flipped_cards
         self.data_changed.emit()
 
-
     def flipped(self, i):
         # This model only flips all or no cards, so we don't care about the index.
         # Might be different for other games though!
         return self.flipped_cards
-
-
 
     def best_poker_hand(self, cards):
         cards = np.append(self.cards, cards)
@@ -203,35 +205,35 @@ class PlayerHandModel(PlayerHand, QObject):
 
         v = self.check_straight_flush(value_count, suit_count)
         if v is not None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_four_of_a_kind(value_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_full_house(value_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_flush(suit_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_straight(value_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_three_of_a_kind(value_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_two_pair(value_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         v = self.check_one_pair(value_count)
         if v is not None and self.card_combo is None:
-            self.card_combo = v
+            self.card_combo = [v, CardCombo.highcard]
 
         if self.card_combo is None:
             self.card_combo = CardCombo.highcard
@@ -247,7 +249,6 @@ class PlayerHandModel(PlayerHand, QObject):
     def check_two_pair(value_count):
         if value_count.count(2) >= 2:
             return CardCombo.twopair
-
 
     @staticmethod
     def check_three_of_a_kind(value_count):
@@ -287,6 +288,7 @@ class PlayerHandModel(PlayerHand, QObject):
     def check_four_of_a_kind(value_count):
         if 4 in value_count:
             return CardCombo.fourofakind
+
     @staticmethod
     def check_straight_flush(value_count, suit_count):
         if 5 in suit_count:

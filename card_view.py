@@ -1,15 +1,8 @@
-#from PySide.QtCore import *
-#from PySide.QtGui import *
-#from PySide.QtSvg import *
-#from PyQt4.QtCore import *
-#from PyQt4.QtGui import *
-#from PyQt4.QtSvg import *
-from PyQt5.QtCore import *
+
 from PyQt5.QtGui import *
 from PyQt5.QtSvg import *
 from PyQt5.QtWidgets import *
 import sys
-#import pycards as pc
 
 # NOTE: This is just given as an example of how to use CardView.
 # It is expected that you will need to adjust things to make a game out of it. 

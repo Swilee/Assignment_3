@@ -5,10 +5,6 @@ from PyQt5.QtSvg import *
 import sys
 from Assignment_3 import card_view  # poker, pokergame
 
-CurrentBet = 0
-
-app = QApplication(sys.argv)
-
 
 class Tablescene(QGraphicsScene):
     def __init__(self):
@@ -49,7 +45,7 @@ class PokerWindow(QGraphicsView):
             self.setWindowTitle("Texas Hold'em")
 
 
-class Playerwindow(QGroupBox):
+class PlayerWindow(QGroupBox):
     def __init__(self, player):
         super().__init__(player.name)
         self.player = player
@@ -72,8 +68,9 @@ class Playerwindow(QGroupBox):
         self.active.setText('Waiting for other player')
 
 
-class Tablewindow(QGroupBox):
+class TableWindow(QGroupBox):
     quitter = pyqtSignal()
+
     def __init__(self, table):
         super().__init__()
         self.setLayout(QHBoxLayout())
@@ -88,11 +85,9 @@ class Tablewindow(QGroupBox):
         self.update_pot_and_bet()
         self.table.new_pot_or_bet.connect(self.update_pot_and_bet)
 
-
     def update_pot_and_bet(self):
         self.pot.setText('Pot: %d $' % self.table.Pot)
         self.CurrentBet.setText('Current bet: %d $' % self.table.CurrentBet)
-
 
 
 class Buttons(QGroupBox):
@@ -107,4 +102,5 @@ class Buttons(QGroupBox):
         self.layout().addWidget(self.betbutton)
 
 
-
+CurrentBet = 0
+app = QApplication(sys.argv)

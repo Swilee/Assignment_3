@@ -32,6 +32,7 @@ class Table(QObject):
         self.Pot = pot
         self.hand = poker.TableModel()
 
+
 class GameMaster(QObject):
     next_hand = pyqtSignal()
     game_start = pyqtSignal()
@@ -101,24 +102,23 @@ class GameMaster(QObject):
         elif self.round == 4:
             self.Players[0].hand.best_poker_hand(self.table.hand.cards)
             self.Players[1].hand.best_poker_hand(self.table.hand.cards)
-            if self.Players[0].hand < self.Players[1].hand:
+            if self.Players[0].hand[0] < self.Players[1].hand[0]:
                 self.winner = 1
                 self.win()
-            elif self.Players[0].hand > self.Players[1].hand:
+            elif self.Players[0].hand[0] > self.Players[1].hand[0]:
                 self.winner = 0
                 self.win()
-            elif self.Players[0].hand == self.Players[1].hand:
-                if self.Players[0].hand.highcard > self.Players[1].hand.highcard:
+            elif self.Players[0].hand[0] == self.Players[1].hand[0]:
+                if self.Players[0].hand[1] > self.Players[1].hand[1]:
                     self.winner = 0
                     self.win()
-                elif self.Players[0].hand.highcard < self.Players[1].hand.highcard:
+                elif self.Players[0].hand[1] < self.Players[1].hand[1]:
                     self.winner = 1
                     self.win()
                 else:
                     self.draw()
 
     def check_or_call(self):
-
         if self.table.CurrentBet == 0:
             if self.first_action:
                 self.first_action = False
@@ -177,7 +177,6 @@ class GameMaster(QObject):
                 self.change_player.emit()
 
     def win(self):
-
         self.Players[self.winner].stack = self.Players[self.winner].stack + self.table.Pot
         QMessageBox.information(QMessageBox(), 'Player won',
                                    'Congratulations, player %s won %d $' % (self.Players[self.winner].name, self.table.Pot), QMessageBox.Ok)
@@ -193,7 +192,6 @@ class GameMaster(QObject):
                                    'Draw', 'No Player won')
         self.next_hand.emit()
 
-
     def fold(self):
 
         self.Players[not int(self.activeplayer)].stack = self.Players[not int(self.activeplayer)].stack + self.table.Pot
@@ -204,13 +202,11 @@ class GameMaster(QObject):
         self.table.new_pot_or_bet.emit()
         self.next_hand.emit()
 
-
-
     def start(self):
         self.app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
-        self.tablebox = Assignment_3_Andreasson_Edman.Tablewindow(self.table)
-        self.Players[0].playerbox = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[0])
-        self.Players[1].playerbox = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[1])
+        self.tablebox = Assignment_3_Andreasson_Edman.TableWindow(self.table)
+        self.Players[0].playerbox = Assignment_3_Andreasson_Edman.PlayerWindow(self.Players[0])
+        self.Players[1].playerbox = Assignment_3_Andreasson_Edman.PlayerWindow(self.Players[1])
         self.Players[self.starting_player].playerbox.set_to_active()
         self.Players[int(not self.starting_player)].playerbox.set_to_inactive()
         self.game = Assignment_3_Andreasson_Edman.PokerWindow()
