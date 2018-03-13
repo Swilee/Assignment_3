@@ -102,21 +102,16 @@ class GameMaster(QObject):
         elif self.round == 4:
             self.Players[0].hand.best_poker_hand(self.table.hand.cards)
             self.Players[1].hand.best_poker_hand(self.table.hand.cards)
-            if self.Players[0].hand[0] < self.Players[1].hand[0]:
+
+            if self.Players[0].hand.pokerhand < self.Players[1].hand.pokerhand:
                 self.winner = 1
                 self.win()
-            elif self.Players[0].hand[0] > self.Players[1].hand[0]:
+            elif self.Players[0].hand.pokerhand > self.Players[1].hand.pokerhand:
                 self.winner = 0
                 self.win()
-            elif self.Players[0].hand[0] == self.Players[1].hand[0]:
-                if self.Players[0].hand[1] > self.Players[1].hand[1]:
-                    self.winner = 0
-                    self.win()
-                elif self.Players[0].hand[1] < self.Players[1].hand[1]:
-                    self.winner = 1
-                    self.win()
-                else:
-                    self.draw()
+            else:
+                self.draw()
+
 
     def check_or_call(self):
         if self.table.CurrentBet == 0:
@@ -209,8 +204,7 @@ class GameMaster(QObject):
         self.Players[1].playerbox = Assignment_3_Andreasson_Edman.PlayerWindow(self.Players[1])
         self.Players[self.starting_player].playerbox.set_to_active()
         self.Players[int(not self.starting_player)].playerbox.set_to_inactive()
-        self.game = Assignment_3_Andreasson_Edman.PokerWindow()
-        self.game.Create_GUI(self.Players[0].playerbox, self.Players[1].playerbox, self.tablebox, self.btn)
+        self.game = Assignment_3_Andreasson_Edman.PokerWindow(self.Players[0].playerbox, self.Players[1].playerbox, self.tablebox, self.btn)
         self.game.show()
         self.game_start.emit()
         self.app.exec_()

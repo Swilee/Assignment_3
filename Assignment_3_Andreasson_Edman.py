@@ -15,34 +15,20 @@ class Tablescene(QGraphicsScene):
 
 class PokerWindow(QGraphicsView):
     '''
-    PokerWindow represents the five cards put on the table and the player options
+    PokerWindow represents the main window of
     '''
-    def __init__(self):
-        #super().__init__("Poker content")
-
+    def __init__(self,player1, player2, table, btn):
         self.scene = Tablescene()
         super().__init__(self.scene)
-
-        '''
-        if self.checkbutton.isChecked():
-            self.check_press.emit()
-
-        if self.betbutton.isChecked():
-            self.bet_press.emit()
-
-        if self.foldbutton.isChecked():
-            self.fold_press.emit()
-        '''
-    def Create_GUI(self,player1,player2,table,btn):
-            final = QVBoxLayout()
-            final.addWidget(table)
-            final.layout().addWidget(btn)
-            final.addWidget(player1)
-            final.addWidget(player2)
-            final.scene = self.scene
-            self.setLayout(final)
-            self.setGeometry(400, 100, 600, 500)
-            self.setWindowTitle("Texas Hold'em")
+        final = QVBoxLayout()
+        final.addWidget(table)
+        final.layout().addWidget(btn)
+        final.addWidget(player1)
+        final.addWidget(player2)
+        final.scene = self.scene
+        self.setLayout(final)
+        self.setGeometry(400, 100, 600, 500)
+        self.setWindowTitle("Texas Hold'em")
 
 
 class PlayerWindow(QGroupBox):
@@ -68,8 +54,8 @@ class PlayerWindow(QGroupBox):
         self.active.setText('Waiting for other player')
 
 
-class TableWindow(QGroupBox):
-    quitter = pyqtSignal()
+
+class Tablewindow(QGroupBox):
 
     def __init__(self, table):
         super().__init__()
