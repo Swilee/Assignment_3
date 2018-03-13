@@ -19,7 +19,7 @@ class Tablescene(QGraphicsScene):
 
 class PokerWindow(QGraphicsView):
     '''
-    PokerWindow represents the main window of
+    PokerWindow represents the main window
     '''
     def __init__(self,player1, player2, table, btn):
         self.scene = Tablescene()
@@ -59,7 +59,7 @@ class Playerwindow(QGroupBox):
 
 
 class Tablewindow(QGroupBox):
-
+    quitter = pyqtSignal()
     def __init__(self, table):
         super().__init__()
         self.setLayout(QHBoxLayout())

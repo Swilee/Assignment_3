@@ -165,21 +165,6 @@ class PlayerHand:
     def __init__(self):
         self.cards = np.array([])
 
-    def __eq__(self, other):
-        return self.card_combo.value == other.card_combo.value and self.highcard == other.highcard
-
-    def __lt__(self, other):
-        if self.card_combo.value == other.card_combo.value:
-            return self.highcard < other.highcard
-        else:
-            return self.card_combo.value < other.card_combo.value
-
-    def __gt__(self, other):
-        if self.card_combo.value == other.card_combo.value:
-            return self.highcard > other.highcard
-        else:
-            return self.card_combo.value > other.card_combo.value
-
     def give_card(self, card):
         self.cards = np.append(self.cards, card)
 

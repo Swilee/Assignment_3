@@ -70,6 +70,13 @@ class GameMaster(QObject):
             else:
                 self.Players[i].hand.give_card(card)
 
+        self.app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
+        self.tablebox = Assignment_3_Andreasson_Edman.Tablewindow(self.table)
+        self.Players[0].playerbox = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[0])
+        self.Players[1].playerbox = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[1])
+        self.Players[self.starting_player].playerbox.set_to_active()
+        self.Players[int(not self.starting_player)].playerbox.set_to_inactive()
+
         self.btn = Assignment_3_Andreasson_Edman.Buttons()
         self.btn.betbutton.clicked.connect(self.bet)
         self.btn.foldbutton.clicked.connect(self.fold)
@@ -79,6 +86,11 @@ class GameMaster(QObject):
         self.game_start.connect(self.round_controller)
         self.change_player.connect(self.change_active_player)
         self.next_round.connect(self.round_controller)
+
+        self.game = Assignment_3_Andreasson_Edman.PokerWindow(self.Players[0].playerbox, self.Players[1].playerbox, self.tablebox, self.btn)
+        self.game.show()
+        self.game_start.emit()
+        self.app.exec_()
 
     def round_controller(self):
         self.Players[0].current_bet = 0
@@ -197,21 +209,6 @@ class GameMaster(QObject):
         self.table.new_pot_or_bet.emit()
         self.next_hand.emit()
 
-
-
-    def start(self):
-        self.app = Assignment_3_Andreasson_Edman.QApplication(sys.argv)
-        self.tablebox = Assignment_3_Andreasson_Edman.Tablewindow(self.table)
-        self.Players[0].playerbox = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[0])
-        self.Players[1].playerbox = Assignment_3_Andreasson_Edman.Playerwindow(self.Players[1])
-        self.Players[self.starting_player].playerbox.set_to_active()
-        self.Players[int(not self.starting_player)].playerbox.set_to_inactive()
-        self.game = Assignment_3_Andreasson_Edman.PokerWindow(self.Players[0].playerbox, self.Players[1].playerbox, self.tablebox, self.btn)
-        self.game.show()
-        self.game_start.emit()
-        self.app.exec_()
-
-
     def flop(self):
         self.table.CurrentBet = 0
         self.table.new_pot_or_bet.emit()
@@ -269,4 +266,4 @@ class GameMaster(QObject):
         self.next_round.emit()
 
 
-GameMaster().start()
+GameMaster()
