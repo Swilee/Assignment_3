@@ -13,22 +13,32 @@ class Tablescene(QGraphicsScene):
         self.setBackgroundBrush(QBrush(self.tile))
 
 
-class PokerWindow(QGraphicsView):
+class PokerWindow(QWidget):
     '''
     PokerWindow represents the main window
     '''
-    def __init__(self,player1, player2, table, btn):
-        self.scene = Tablescene()
-        super().__init__(self.scene)
+
+    #def __init__(self, player1, player2, table, btn):
+    def __init__(self, game):
+        #self.scene = Tablescene()
+        #super().__init__(self.scene)
+        super().__init__()
         final = QVBoxLayout()
-        final.addWidget(table)
-        final.layout().addWidget(btn)
-        final.addWidget(player1)
-        final.addWidget(player2)
-        final.scene = self.scene
+        final.addWidget(TableWindow(game.table))
+        final.layout().addWidget(Buttons(game))
+        final.addWidget(game.player1)
+        final.addWidget(game.player2)
+        #final.scene = self.scene
         self.setLayout(final)
         self.setGeometry(400, 100, 600, 500)
         self.setWindowTitle("Texas Hold'em")
+
+        self.game.game_message.connect(self.present_message)
+        #self.game.ended.connect(self.close)
+
+    def present_message(self, s):
+        #self.eventWidget.addLine(s)
+        QMessageBox.information(QMessageBox(), 'Message', s)
 
 
 class PlayerWindow(QGroupBox):
@@ -45,7 +55,7 @@ class PlayerWindow(QGroupBox):
         self.update_stack()
 
     def update_stack(self):
-        self.stack.setText('%d $' % self.player.stack)
+        self.stack.setText('$%d' % self.player.stack)
 
     def set_to_active(self):
         self.active.setText('Your turn')
@@ -77,7 +87,7 @@ class TableWindow(QGroupBox):
 
 
 class Buttons(QGroupBox):
-    def __init__(self):
+    def __init__(self, game):
         super().__init__()
         self.checkbutton = QPushButton('Check/Call')
         self.foldbutton = QPushButton("Fold")
@@ -87,6 +97,20 @@ class Buttons(QGroupBox):
         self.layout().addWidget(self.foldbutton)
         self.layout().addWidget(self.betbutton)
 
+        self.checkbutton.clicked.connect(game.check_or_call)
 
-CurrentBet = 0
+        def read_and_pass_bet():
+            min_bet, max_bet = game.compute_bet_limit()
+            amount, ok = QInputDialog.getInt(self, 'Bet', 'Enter bet (min = %d, max = %d)' % (
+                min_bet, max_bet) , min=min_bet, max=max_bet)
+            game.bet(int(amount))
+
+        self.betbutton.clicked.connect(read_and_pass_bet)
+
+
 app = QApplication(sys.argv)
+
+window = PokerWindow(pokergame.GameMaster())
+window.show()
+
+app.exec_()
