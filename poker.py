@@ -4,6 +4,7 @@ from enum import IntEnum
 from PyQt5.QtCore import *
 from abc import ABC, abstractmethod
 
+
 class Suit(Enum):
     """
     Here an enum class is created to represent the suits.
@@ -86,10 +87,11 @@ class NumberedCard(PlayingCard):
     def give_value(self):
         return self.value
 
+
 class JackCard(PlayingCard):
-    '''
+    """
     The JackCard class represents the jack card
-    '''
+    """
     def __init__(self, suit):
         super().__init__()
         self.suit = suit
@@ -99,6 +101,7 @@ class JackCard(PlayingCard):
 
     def give_value(self):
         return self.value
+
 
 class QueenCard(PlayingCard):
     def __init__(self, suit):
@@ -111,6 +114,7 @@ class QueenCard(PlayingCard):
     def give_value(self):
         return self.value
 
+
 class KingCard(PlayingCard):
     def __init__(self, suit):
         super().__init__()
@@ -121,6 +125,7 @@ class KingCard(PlayingCard):
 
     def give_value(self):
         return self.value
+
 
 class AceCard(PlayingCard):
     def __init__(self, suit):
@@ -193,7 +198,6 @@ class PlayerHandModel(PlayerHand, QObject):
         self.flipped_cards = not self.flipped_cards
         self.data_changed.emit()
 
-
     def flipped(self, i):
         # This model only flips all or no cards, so we don't care about the index.
         # Might be different for other games though!
@@ -206,7 +210,6 @@ class PlayerHandModel(PlayerHand, QObject):
     def remove_card(self, index):
         super().remove_card(index)
         self.data_changed.emit()
-
 
     def best_poker_hand(self, cards):
         cards = np.append(self.cards, cards)
@@ -229,6 +232,7 @@ class PlayerHandModel(PlayerHand, QObject):
 
         v, card_values = self.check_straight_flush(suit_card_connector, suit_count)
         if v is not None:
+
             self.card_combo = v
             self.card_values = card_values
 
@@ -274,6 +278,7 @@ class PlayerHandModel(PlayerHand, QObject):
                 self.card_combo = v
                 self.card_values = card_values
 
+
         if self.card_combo is None:
             self.card_combo, self.card_values = self.high_card(value_count)
 
@@ -310,7 +315,7 @@ class PlayerHandModel(PlayerHand, QObject):
                 if data == 1:
                     card_values.append(j+1)
 
-            return 1, card_values[0:5]
+            return 1, card_values[0:4]
         else:
             return None, None
     @staticmethod
@@ -339,6 +344,7 @@ class PlayerHandModel(PlayerHand, QObject):
             return 2, card_values
         else:
             return None, None
+
 
     @staticmethod
     def check_three_of_a_kind(value_count):
@@ -434,6 +440,7 @@ class PlayerHandModel(PlayerHand, QObject):
                     return 7, card_values
         else:
             return None, None
+
 
 
     @staticmethod
