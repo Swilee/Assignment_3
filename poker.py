@@ -170,21 +170,6 @@ class PlayerHand:
     def __init__(self):
         self.cards = np.array([])
 
-    def __eq__(self, other):
-        return self.card_combo.value == other.card_combo.value and self.highcard == other.highcard
-
-    def __lt__(self, other):
-        if self.card_combo.value == other.card_combo.value:
-            return self.highcard < other.highcard
-        else:
-            return self.card_combo.value < other.card_combo.value
-
-    def __gt__(self, other):
-        if self.card_combo.value == other.card_combo.value:
-            return self.highcard > other.highcard
-        else:
-            return self.card_combo.value > other.card_combo.value
-
     def give_card(self, card):
         self.cards = np.append(self.cards, card)
 
@@ -330,7 +315,7 @@ class PlayerHandModel(PlayerHand, QObject):
                 if data == 1:
                     card_values.append(j+1)
 
-            return 1, card_values[0:5]
+            return 1, card_values[0:4]
         else:
             return None, None
     @staticmethod
