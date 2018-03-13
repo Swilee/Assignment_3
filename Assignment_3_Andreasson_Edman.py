@@ -26,13 +26,15 @@ class PokerWindow(QWidget):
         final = QVBoxLayout()
         final.addWidget(TableWindow(game.table))
         final.layout().addWidget(Buttons(game))
-        final.addWidget(PlayerWindow(game.players))
+        final.addWidget(PlayerWindow(game.players[0]))
         final.addWidget(PlayerWindow(game.players[1]))
         #final.addWidget(game.players[1])
         #final.scene = self.scene
         self.setLayout(final)
         self.setGeometry(400, 100, 600, 500)
         self.setWindowTitle("Texas Hold'em")
+        
+        self.game = game
 
         self.game.game_message.connect(self.present_message)
 
@@ -55,7 +57,7 @@ class PlayerWindow(QGroupBox):
         self.active = QLabel()
         self.layout().addWidget(self.active)
         self.update_stack()
-        self.change_player.connect(self.change_active_player)
+        self.player.player_changed.connect(self.change_active_player)
 
     def change_active_player(self):
         if self.player.active == 1:

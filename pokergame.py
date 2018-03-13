@@ -36,7 +36,6 @@ class Table(QObject):
 class GameMaster(QObject):
     next_hand = pyqtSignal()
     game_start = pyqtSignal()
-    change_player = pyqtSignal()
     next_round = pyqtSignal()
     game_message = pyqtSignal((str,))
     ended = pyqtSignal((str,))
@@ -52,7 +51,7 @@ class GameMaster(QObject):
         self.ActivePlayers = NUMBEROFPLAYERS
         playername =[]
         for i in range(NUMBEROFPLAYERS):
-            playername.append (['%s' % str(i + 1)] ) # input('Player %d name:' % (i+1))
+            playername.append ('%s' % str(i + 1) ) # input('Player %d name:' % (i+1))
         self.players = []
         self.table = Table(STARTINGBET, 0)
         self.activeplayer = 0
@@ -61,7 +60,8 @@ class GameMaster(QObject):
 
         for i in range(NUMBEROFPLAYERS):
             player = Player(STARTINGSTACK, playername[i])
-            self.players.append([player])
+            self.players.append(player)
+        print(self.players[0].name)
         self.players[self.starting_player].hand.active=1
         for i in range(2 * NUMBEROFPLAYERS):
             card = self.deck.take_top_card()
@@ -219,8 +219,8 @@ class GameMaster(QObject):
         self.activeplayer = int(not self.activeplayer)
         self.players[0].hand.active = not self.players[0].hand.active
         self.players[1].hand.active = not self.players[1].hand.active
-        self.players[int (not self.activeplayer)].change_player.emit()
-        self.players[self.activeplayer].change_player.emit()
+        self.players[int (not self.activeplayer)].player_changed.emit()
+        self.players[self.activeplayer].player_changed.emit()
 
     def new_hand(self):
         self.players[self.activeplayer].hand.flipped_cards = True
