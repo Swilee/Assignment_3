@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtSvg import *
 import sys
-from Assignment_3 import card_view  # poker, pokergame
+from Assignment_3 import card_view, pokergame
 
 
 class Tablescene(QGraphicsScene):
@@ -26,15 +26,17 @@ class PokerWindow(QWidget):
         final = QVBoxLayout()
         final.addWidget(TableWindow(game.table))
         final.layout().addWidget(Buttons(game))
-        final.addWidget(game.player1)
-        final.addWidget(game.player2)
+        final.addWidget(PlayerWindow(game.players))
+        final.addWidget(PlayerWindow(game.players[1]))
+        #final.addWidget(game.players[1])
         #final.scene = self.scene
         self.setLayout(final)
         self.setGeometry(400, 100, 600, 500)
         self.setWindowTitle("Texas Hold'em")
 
         self.game.game_message.connect(self.present_message)
-        #self.game.ended.connect(self.close)
+
+        #self.game_ended.connect(self.close)
 
     def present_message(self, s):
         #self.eventWidget.addLine(s)
@@ -53,20 +55,20 @@ class PlayerWindow(QGroupBox):
         self.active = QLabel()
         self.layout().addWidget(self.active)
         self.update_stack()
+        self.change_player.connect(self.change_active_player)
+
+    def change_active_player(self):
+        if self.player.active == 1:
+            self.active.setText('Your turn')
+        else:
+            self.active.setText('Waiting for other player')
 
     def update_stack(self):
         self.stack.setText('$%d' % self.player.stack)
 
-    def set_to_active(self):
-        self.active.setText('Your turn')
-
-    def set_to_inactive(self):
-        self.active.setText('Waiting for other player')
-
-
 
 class TableWindow(QGroupBox):
-    quitter = pyqtSignal()
+
     def __init__(self, table):
         super().__init__()
         self.setLayout(QHBoxLayout())
@@ -97,15 +99,16 @@ class Buttons(QGroupBox):
         self.layout().addWidget(self.foldbutton)
         self.layout().addWidget(self.betbutton)
 
-        self.checkbutton.clicked.connect(game.check_or_call)
 
         def read_and_pass_bet():
             min_bet, max_bet = game.compute_bet_limit()
             amount, ok = QInputDialog.getInt(self, 'Bet', 'Enter bet (min = %d, max = %d)' % (
-                min_bet, max_bet) , min=min_bet, max=max_bet)
+                min_bet, max_bet), min=min_bet, max=max_bet)
             game.bet(int(amount))
 
         self.betbutton.clicked.connect(read_and_pass_bet)
+        self.foldbutton.clicked.connect(game.fold)
+        self.checkbutton.clicked.connect(game.check_or_call)
 
 
 app = QApplication(sys.argv)

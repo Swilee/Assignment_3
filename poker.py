@@ -64,7 +64,7 @@ class PlayingCard(ABC):
 
     @abstractmethod
     def give_value(self):
-        raise NotImplementedError
+        pass
 
     def __str__(self):
         return '%s %s' %(self.symbol , self.uni)
