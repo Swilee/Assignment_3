@@ -37,8 +37,11 @@ class PokerWindow(QWidget):
         self.game = game
 
         self.game.game_message.connect(self.present_message)
+        self.game.ended.connect(self.end_game)
 
-        #self.game_ended.connect(self.close)
+    def end_game(self, s):
+        QMessageBox.information(self, 'Game message', '%s' % s)
+        self.close()
 
     def present_message(self, s):
         #self.eventWidget.addLine(s)
@@ -104,9 +107,10 @@ class Buttons(QGroupBox):
 
         def read_and_pass_bet():
             min_bet, max_bet = game.compute_bet_limit()
-            amount, ok = QInputDialog.getInt(self, 'Bet', 'Enter bet (min = %d, max = %d)' % (
-                min_bet, max_bet), min=min_bet, max=max_bet)
-            game.bet(int(amount))
+            if max_bet:
+                amount, ok = QInputDialog.getInt(self, 'Bet', 'Enter bet (min = %d, max = %d)' % (
+                    min_bet, max_bet), min=min_bet, max=max_bet)
+                game.bet(int(amount))
 
         self.betbutton.clicked.connect(read_and_pass_bet)
         self.foldbutton.clicked.connect(game.fold)

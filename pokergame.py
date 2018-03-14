@@ -57,7 +57,7 @@ class GameMaster(QObject):
         self.table = Table(self.startingbet, 0)
         self.activeplayer = 0
         self.first_action = True
-        self.round = 0
+        self.round = 1
 
         for i in range(NUMBEROFPLAYERS):
             player = Player(STARTINGSTACK, playername[i])
@@ -99,12 +99,13 @@ class GameMaster(QObject):
             self.round = self.round + 1
             self.river()
         elif self.round == 4:
-            best_hands = [player.best_poker_hand(self.table.hand.cards) for player in self.players]
+            for player in self.players:
+                player.hand.best_poker_hand(self.table.hand.cards)
 
-            if best_hands[0] < best_hands[1]:
+            if self.players[0].hand.pokerhand < self.players[1].hand.pokerhand:
                 self.winner = 1
                 self.win()
-            elif best_hands[0] > best_hands[1]:
+            elif self.players[0].hand.pokerhand > self.players[1].hand.pokerhand:
                 self.winner = 0
                 self.win()
             else:
@@ -141,12 +142,15 @@ class GameMaster(QObject):
     def compute_bet_limit(self):
         if self.players[self.activeplayer].stack == 0:
             self.game_message.emit('Unable to place bet: You have no money')
+            return 0, 0
 
 
         elif self.players[int(not self.activeplayer)].stack == 0:
             self.game_message.emit('Unable to place bet: Opponent has no money')
+            return 0, 0
 
         else:
+            self.bet_ok = True
             limits = [self.players[self.activeplayer].stack + self.players[self.activeplayer].current_bet,
                       self.players[int(not self.activeplayer)].stack + self.players[
                           int(not self.activeplayer)].current_bet]
@@ -182,7 +186,6 @@ class GameMaster(QObject):
         self.players[not int(self.activeplayer)].stack = self.players[not int(self.activeplayer)].stack + self.table.Pot
         self.players[not int(self.activeplayer)].new_stack.emit()
         self.game_message.emit('Congratulations, player %s won ' % self.players[not int(self.activeplayer)].name)
-
         self.table.new_pot_or_bet.emit()
         self.next_hand.emit()
 
