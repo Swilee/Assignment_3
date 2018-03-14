@@ -86,7 +86,7 @@ class TableWindow(QGroupBox):
         self.table.new_pot_or_bet.connect(self.update_pot_and_bet)
 
     def update_pot_and_bet(self):
-        self.pot.setText('Pot: %d $' % self.table.Pot)
+        self.pot.setText('Pot: %d $' % self.table.pot)
         self.currentbet.setText('Current bet: %d $' % self.table.currentbet)
 
 

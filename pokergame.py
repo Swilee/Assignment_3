@@ -29,7 +29,7 @@ class Table(QObject):
     def __init__(self, currentbet, pot):
         super().__init__()
         self.currentbet = currentbet
-        self.Pot = pot
+        self.pot = pot
         self.hand = poker.TableModel()
 
 
@@ -122,7 +122,7 @@ class GameMaster(QObject):
             if not self.first_action:
                 amount = self.table.currentbet
                 self.players[self.activeplayer].stack = self.players[self.activeplayer].stack - amount + self.players[self.activeplayer].current_bet
-                self.table.Pot = self.table.Pot+amount - self.players[self.activeplayer].current_bet
+                self.table.pot = self.table.pot + amount - self.players[self.activeplayer].current_bet
                 self.table.currentbet = amount
                 self.players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
@@ -131,7 +131,7 @@ class GameMaster(QObject):
                 amount = self.table.currentbet
                 self.players[self.activeplayer].stack = self.players[self.activeplayer].stack - amount + self.players[
                 self.activeplayer].current_bet
-                self.table.Pot = self.table.Pot + amount - self.players[self.activeplayer].current_bet
+                self.table.pot = self.table.pot + amount - self.players[self.activeplayer].current_bet
                 self.table.currentbet = amount
                 self.players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
@@ -155,7 +155,7 @@ class GameMaster(QObject):
     def bet(self, amount):
 
         self.players[self.activeplayer].stack = self.players[self.activeplayer].stack - amount + self.players[self.activeplayer].current_bet
-        self.table.Pot = self.table.Pot + amount - self.players[self.activeplayer].current_bet
+        self.table.pot = self.table.pot + amount - self.players[self.activeplayer].current_bet
         self.table.currentbet = amount
         self.players[self.activeplayer].current_bet = amount
         self.first_action = False
@@ -164,14 +164,14 @@ class GameMaster(QObject):
         self.change_player.emit()
 
     def win(self):
-        self.players[self.winner].stack = self.players[self.winner].stack + self.table.Pot
-        self.game_message.emit('Congratulations, player %s won %d $' % (self.players[self.winner].name, self.table.Pot))
+        self.players[self.winner].stack = self.players[self.winner].stack + self.table.pot
+        self.game_message.emit('Congratulations, player %s won %d $' % (self.players[self.winner].name, self.table.pot))
         self.players[self.winner].new_stack.emit()
         self.next_hand.emit()
 
     def draw(self):
-        self.players[0].stack = self.players[0].stack + self.table.Pot / 2
-        self.players[1].stack = self.players[1].stack + self.table.Pot / 2
+        self.players[0].stack = self.players[0].stack + self.table.pot / 2
+        self.players[1].stack = self.players[1].stack + self.table.pot / 2
         self.players[0].new_stack.emit()
         self.players[1].new_stack.emit()
         self.game_message.emit('Draw, no player won')
@@ -179,7 +179,7 @@ class GameMaster(QObject):
 
     def fold(self):
 
-        self.players[not int(self.activeplayer)].stack = self.players[not int(self.activeplayer)].stack + self.table.Pot
+        self.players[not int(self.activeplayer)].stack = self.players[not int(self.activeplayer)].stack + self.table.pot
         self.players[not int(self.activeplayer)].new_stack.emit()
         self.game_message.emit('Congratulations, player %s won ' % self.players[not int(self.activeplayer)].name)
 
@@ -206,7 +206,7 @@ class GameMaster(QObject):
         elif self.players[1].stack == 0:
             self.ended.emit('Congratulations, player 1 won the game')
         else:
-            self.table.Pot = 0
+            self.table.pot = 0
             self.deck = poker.Deck()
             self.deck.shuffle_deck()
             self.players[0].hand.remove_card(np.s_[:])
