@@ -33,7 +33,7 @@ class PokerWindow(QWidget):
         self.setLayout(final)
         self.setGeometry(400, 100, 600, 500)
         self.setWindowTitle("Texas Hold'em")
-        
+
         self.game = game
 
         self.game.game_message.connect(self.present_message)
@@ -60,7 +60,7 @@ class PlayerWindow(QGroupBox):
         self.player.player_changed.connect(self.change_active_player)
 
     def change_active_player(self):
-        if self.player.active == 1:
+        if self.player.hand.active:
             self.active.setText('Your turn')
         else:
             self.active.setText('Waiting for other player')
@@ -77,17 +77,17 @@ class TableWindow(QGroupBox):
         self.layout().addWidget(card_view.CardView(table.hand))
         self.table = table
         self.pot = QLabel()
-        self.CurrentBet = QLabel()
+        self.currentbet = QLabel()
         self.vbox = QVBoxLayout()
         self.vbox.addWidget(self.pot)
-        self.vbox.addWidget(self.CurrentBet)
+        self.vbox.addWidget(self.currentbet)
         self.layout().addLayout(self.vbox)
         self.update_pot_and_bet()
         self.table.new_pot_or_bet.connect(self.update_pot_and_bet)
 
     def update_pot_and_bet(self):
         self.pot.setText('Pot: %d $' % self.table.Pot)
-        self.CurrentBet.setText('Current bet: %d $' % self.table.CurrentBet)
+        self.currentbet.setText('Current bet: %d $' % self.table.currentbet)
 
 
 class Buttons(QGroupBox):
