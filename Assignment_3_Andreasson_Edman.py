@@ -110,7 +110,8 @@ class Buttons(QGroupBox):
             if max_bet:
                 amount, ok = QInputDialog.getInt(self, 'Bet', 'Enter bet (min = %d, max = %d)' % (
                     min_bet, max_bet), min=min_bet, max=max_bet)
-                game.bet(int(amount))
+                if ok:
+                    game.bet(int(amount))
 
         self.betbutton.clicked.connect(read_and_pass_bet)
         self.foldbutton.clicked.connect(game.fold)
