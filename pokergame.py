@@ -1,10 +1,9 @@
 #from Assignment_3 import Assignment_3_Andreasson_Edman
-from Assignment_3 import poker
+import poker
 from PyQt5.QtCore import *
 #from PyQt5.QtWidgets import *
 import numpy as np
 
-import sys
 
 '''
 Setup
@@ -70,12 +69,9 @@ class GameMaster(QObject):
                 self.players[i - NUMBEROFPLAYERS].hand.give_card(card)
             else:
                 self.players[i].hand.give_card(card)
-
-
         self.players[self.starting_player].active = 1
         self.players[self.starting_player].player_changed.emit()
         self.players[int(not self.starting_player)].player_changed.emit()
-
         self.next_hand.connect(self.end_of_hand)
         self.change_player.connect(self.change_active_player)
         self.next_round.connect(self.round_controller)
@@ -125,15 +121,18 @@ class GameMaster(QObject):
                 self.players[self.activeplayer].stack = self.players[self.activeplayer].stack - amount + self.players[self.activeplayer].current_bet
                 self.table.pot = self.table.pot + amount - self.players[self.activeplayer].current_bet
                 self.table.currentbet = amount
+                self.players[self.activeplayer].current_bet = amount
                 self.players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
                 self.next_round.emit()
+
             else:
                 amount = self.table.currentbet
                 self.players[self.activeplayer].stack = self.players[self.activeplayer].stack - amount + self.players[
                 self.activeplayer].current_bet
                 self.table.pot = self.table.pot + amount - self.players[self.activeplayer].current_bet
                 self.table.currentbet = amount
+                self.players[self.activeplayer].current_bet = amount
                 self.players[self.activeplayer].new_stack.emit()
                 self.table.new_pot_or_bet.emit()
                 self.first_action = False
@@ -185,7 +184,7 @@ class GameMaster(QObject):
 
         self.players[not int(self.activeplayer)].stack = self.players[not int(self.activeplayer)].stack + self.table.pot
         self.players[not int(self.activeplayer)].new_stack.emit()
-        self.game_message.emit('Congratulations, player %s won ' % self.players[not int(self.activeplayer)].name)
+        self.game_message.emit('Congratulations, player %s won %d $' %( self.players[not int(self.activeplayer)].name, self.table.pot))
         self.table.new_pot_or_bet.emit()
         self.next_hand.emit()
 

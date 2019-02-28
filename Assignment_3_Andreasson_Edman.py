@@ -3,7 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 import sys
-from Assignment_3 import card_view, pokergame
+import card_view, pokergame
 
 
 class Tablescene(QGraphicsScene):
@@ -107,7 +107,7 @@ class Buttons(QGroupBox):
 
         def read_and_pass_bet():
             min_bet, max_bet = game.compute_bet_limit()
-            if max_bet:
+            if max_bet > min_bet:
                 amount, ok = QInputDialog.getInt(self, 'Bet', 'Enter bet (min = %d, max = %d)' % (
                     min_bet, max_bet), min=min_bet, max=max_bet)
                 if ok:
