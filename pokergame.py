@@ -3,8 +3,7 @@ import poker
 from PyQt5.QtCore import *
 #from PyQt5.QtWidgets import *
 import numpy as np
-
-
+import sys
 '''
 Setup
 '''
@@ -240,5 +239,3 @@ class GameMaster(QObject):
             card = self.deck.take_top_card()
             self.players[1].hand.give_card(card)
         self.next_round.emit()
-
-

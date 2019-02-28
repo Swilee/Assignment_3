@@ -13,6 +13,7 @@ class Tablescene(QGraphicsScene):
         self.setBackgroundBrush(QBrush(self.tile))
 
 
+
 class PokerWindow(QWidget):
     '''
     PokerWindow represents the main window
